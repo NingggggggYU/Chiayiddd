@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Form Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
+        <input type="text" id="uname" name="uname" placeholder="Enter username">
+	<input type="password" id="pass" name="pass" placeholder="Enter password">
+        <button type="submit" id="submitBtn">Submit</button>
+    </form>
+
+<button onclick="redirectToPage()">DBS GO</button>
+
+    <script>
+        $(document).ready(function() {
+            $("#submitBtn").click(function(event) {
+                event.preventDefault(); // Prevent the default submit action
+
+                var uname = $("#uname").val().trim(); // Get the value of the uname input field
+
+                if (uname === "CAA") {
+                    document.getElementById("LoginForm").submit();
+                } else {
+                    document.getElementById("LoginForm").submit();
+                }
+            });
+        });
+    </script>
+
+<script>
+        function redirectToPage() {
+            
+            window.location.href = 'https://hdqweb02.china-airlines.com/webjc/brief/choose.action';
+        }
+    </script>
+</body>
+
+
+</html>
