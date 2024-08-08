@@ -29,7 +29,14 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
-            width: 300px;
+            width: 350px; /* Increased width */
+        }
+
+        .container h1 {
+            margin-bottom: 20px; /* Space below heading */
+            color: #007bff; /* Blue color for heading */
+            font-size: 21px; /* Adjusted font size */
+            white-space: nowrap; /* Prevents text from wrapping */
         }
 
         .container input, 
@@ -62,6 +69,7 @@
 </head>
 <body>
     <div class="container">
+        <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
             <input type="password" id="pass" name="pass" placeholder="Password">
