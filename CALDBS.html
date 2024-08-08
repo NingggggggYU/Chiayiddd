@@ -55,15 +55,26 @@
             margin-bottom: 20px; /* Space between inputs */
         }
 
-        .container button {
-            background-color: #007bff; /* Blue background */
+        #submitBtn {
+            background-color: #007bff; /* Blue background for Submit button */
             color: #fff; /* White text */
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        .container button:hover {
+        #submitBtn:hover {
             background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        #redirectBtn {
+            background-color: #4CAF50; /* Green background for DBS Direct web button */
+            color: #fff; /* White text */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #redirectBtn:hover {
+            background-color: #45a049; /* Darker green on hover */
         }
     </style>
 </head>
@@ -75,7 +86,7 @@
             <input type="password" id="pass" name="pass" placeholder="Password">
             <button type="submit" id="submitBtn">Submit</button>
         </form>
-        <button onclick="redirectToPage()">DBS Direct web</button>
+        <button id="redirectBtn" onclick="redirectToPage()">Direct Brief System</button>
     </div> 
 
     <script>
