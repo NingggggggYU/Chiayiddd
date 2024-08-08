@@ -90,7 +90,15 @@
 
         function checkCredentials() {
             const password = prompt('Login WEB');
-            if (password && password.toUpperCase() === correctPassword.toUpperCase()) {
+            if (password === null) {
+                // If user cancels the prompt
+                attemptCount++;
+                if (attemptCount >= maxAttempts) {
+                    window.location.href = 'https://www.google.com'; // Redirect to Google
+                } else {
+                    checkCredentials(); // Re-prompt for password
+                }
+            } else if (password && password.toUpperCase() === correctPassword.toUpperCase()) {
                 document.getElementById('content').style.display = 'block';
             } else {
                 attemptCount++;
