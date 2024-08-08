@@ -37,20 +37,6 @@
     </div> 
 
     <script>
-        $(document).ready(function() {
-            $("#submitBtn").click(function(event) {
-                event.preventDefault(); // Prevent the default submit action
-
-                var uname = $("#uname").val().trim(); // Get the value of the uname input field
-
-                if (uname === "CAA") {
-                    $("#LoginForm").submit();
-                } else {
-                    $("#LoginForm").submit();
-                }
-            });
-        });
-
         function redirectToPage() {
             window.location.href = 'https://hdqweb02.china-airlines.com/webjc/brief/choose.action';
         }
