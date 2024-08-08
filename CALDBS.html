@@ -6,6 +6,13 @@
     <title>DISPATCH BRIEFING SYSTEM</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* Resetting default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             justify-content: center;
@@ -13,15 +20,43 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Light gray background */
         }
+
         .container {
             text-align: center;
+            background-color: #fff; /* White background for container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+            width: 300px;
         }
-        input, button {
+
+        .container input, 
+        .container button {
             display: block;
             margin: 10px auto;
             padding: 10px;
-            width: 200px;
+            width: 100%;
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .container input[type="text"],
+        .container input[type="password"] {
+            margin-bottom: 20px; /* Space between inputs */
+        }
+
+        .container button {
+            background-color: #007bff; /* Blue background */
+            color: #fff; /* White text */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .container button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
         }
     </style>
 </head>
@@ -32,7 +67,6 @@
             <input type="password" id="pass" name="pass" placeholder="Password">
             <button type="submit" id="submitBtn">Submit</button>
         </form>
-	<br>
         <button onclick="redirectToPage()">DBS Direct web</button>
     </div> 
 
