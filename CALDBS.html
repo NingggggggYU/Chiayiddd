@@ -19,6 +19,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+            position: relative;
         }
 
         .content {
@@ -29,6 +30,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 350px;
+            position: relative;
         }
 
         .content h1 {
@@ -70,10 +72,37 @@
         #redirectBtn:hover {
             background-color: #45a049;
         }
+
+        #jeppesenBtn {
+            background-color: #f39c12;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            bottom: -48px; /* Adjust the distance to position the button in the red box area */
+            left: 50;
+            right: 0;
+            margin: 0 auto;
+            width: 180px; /* Set width to match the content's width */
+        }
+
+        #jeppesenBtn:hover {
+            background-color: #e67e22;
+        }
+
+        .version-text {
+            position: absolute;
+            top: -18px; /* Adjust to position the text at the desired location */
+            right: 5px; /* Adjust to position the text at the desired location */
+            font-size: 12px;
+            color: #808080;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="content" id="content">
+        <div class="version-text">Version : 24.07</div>
         <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
@@ -81,7 +110,13 @@
             <button type="submit" id="submitBtn">SUBMIT</button>
         </form>
         <button id="redirectBtn" onclick="redirectToPage()">DIRECT BRIEFING SYSTEM</button>
+        <button id="jeppesenBtn" onclick="submitJeppesenForm()">JEPPESEN CHARTS</button>
     </div>
+
+    <form id="JeppChartsForm" action="https://ww1.jeppesen.com/icharts/index.jsp" method="post" name="JeppChartsForm" style="display:none;">
+        <input type="hidden" name="login-username" value="caldispatcher">
+        <input type="hidden" name="login-password" value="Forwebuse1">
+    </form>
 
     <script>
         const correctPassword = "CALDBS";
@@ -112,6 +147,10 @@
 
         function redirectToPage() {
             window.location.href = 'https://hdqweb02.china-airlines.com/webjc/brief/choose.action';
+        }
+
+        function submitJeppesenForm() {
+            document.getElementById('JeppChartsForm').submit();
         }
 
         // Check credentials when the page loads
