@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DISPATCH BRIEFING SYSTEM</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* Resetting default margin and padding */
         * {
             margin: 0;
             padding: 0;
@@ -20,66 +18,62 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Light gray background */
+            background-color: #f0f0f0;
         }
 
-        .container {
+        .content {
+            display: none; /* Initially hidden */
             text-align: center;
-            background-color: #fff; /* White background for container */
+            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
-            width: 350px; /* Increased width */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
         }
 
-        .container h1 {
-            margin-bottom: 20px; /* Space below heading */
-            color: #007bff; /* Blue color for heading */
-            font-size: 21px; /* Adjusted font size */
-            white-space: nowrap; /* Prevents text from wrapping */
+        .content h1 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 21px;
+            white-space: nowrap;
         }
 
-        .container input, 
-        .container button {
+        .content input, 
+        .content button {
             display: block;
             margin: 10px auto;
             padding: 10px;
             width: 100%;
-            border: 1px solid #ccc; /* Light border */
+            border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
         }
 
-        .container input[type="text"],
-        .container input[type="password"] {
-            margin-bottom: 20px; /* Space between inputs */
-        }
-
         #submitBtn {
-            background-color: #007bff; /* Blue background for Submit button */
-            color: #fff; /* White text */
+            background-color: #007bff;
+            color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         #submitBtn:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+            background-color: #0056b3;
         }
 
         #redirectBtn {
-            background-color: #4CAF50; /* Green background for DBS Direct web button */
-            color: #fff; /* White text */
+            background-color: #4CAF50;
+            color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         #redirectBtn:hover {
-            background-color: #45a049; /* Darker green on hover */
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="content" id="content">
         <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
@@ -87,12 +81,34 @@
             <button type="submit" id="submitBtn">SUBMIT</button>
         </form>
         <button id="redirectBtn" onclick="redirectToPage()">DIRECT BRIEFING SYSTEM</button>
-    </div> 
+    </div>
 
     <script>
+        const correctPassword = "CALDBS";
+        let attemptCount = 0; // Counter for failed attempts
+        const maxAttempts = 3; // Maximum allowed attempts
+
+        function checkCredentials() {
+            const password = prompt('Enter your password');
+            if (password && password.toUpperCase() === correctPassword.toUpperCase()) {
+                document.getElementById('content').style.display = 'block';
+            } else {
+                attemptCount++;
+                if (attemptCount >= maxAttempts) {
+                    window.location.href = 'https://www.google.com'; // Redirect to Google
+                } else {
+                    alert('Incorrect password. Please try again.');
+                    checkCredentials(); // Re-prompt for password
+                }
+            }
+        }
+
         function redirectToPage() {
             window.location.href = 'https://hdqweb02.china-airlines.com/webjc/brief/choose.action';
         }
+
+        // Check credentials when the page loads
+        window.onload = checkCredentials;
     </script>
 </body>
 </html>
