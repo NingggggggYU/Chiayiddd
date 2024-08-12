@@ -101,11 +101,24 @@
             color: #808080;
             font-weight: bold;
         }
+
+        /* Add CSS for IP address display */
+        #ip-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
     <div class="content" id="content">
-        <div class="version-text">Version : 24.08</div>
+        <div class="version-text">Version : 24.09</div>
         <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
@@ -121,10 +134,15 @@
         <input type="hidden" name="login-password" value="Forwebuse1">
     </form>
 
+    <!-- IP Address Container -->
+    <div id="ip-container">
+        IP: <span id="ip-address">Loading IP address...</span>
+    </div>
+
     <script>
         const correctPassword = "CALDBS";
         let attemptCount = 0; // Counter for failed attempts
-        const maxAttempts = 3; // Maximum allowed attempts
+        const maxAttempts = 1; // Maximum allowed attempts
 
         function checkCredentials() {
             const password = prompt('Login WEB');
@@ -158,6 +176,15 @@
 
         // Check credentials when the page loads
         window.onload = checkCredentials;
+
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('ip-address').textContent = data.ip;
+        })
+        .catch(error => {
+            document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
+        });
     </script>
 </body>
 </html>
