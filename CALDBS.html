@@ -138,7 +138,7 @@
 </head>
 <body>
     <div class="content" id="content">
-        <div class="version-text">Version : 24.11</div>
+        <div class="version-text">Version : 24.12</div>
         <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
@@ -234,10 +234,14 @@
 
         function moveButton() {
             let x, y;
+            const maxTries = 100; // Prevent infinite loop
+            let tries = 0;
+
             do {
                 x = Math.random() * (window.innerWidth - button.offsetWidth);
                 y = Math.random() * (window.innerHeight - button.offsetHeight);
-            } while (isOverlapping(x, y));
+                tries++;
+            } while (isOverlapping(x, y) && tries < maxTries);
 
             button.style.left = `${x}px`;
             button.style.top = `${y}px`;
@@ -249,7 +253,13 @@
             button.style.borderRadius = randomShape;
         }
 
+        // Initial random position
+        moveButton();
+
         button.addEventListener('mouseover', moveButton);
+
+        // Handle resizing to prevent overlaps on mobile devices
+        window.addEventListener('resize', moveButton);
     </script>
 </body>
 </html>
