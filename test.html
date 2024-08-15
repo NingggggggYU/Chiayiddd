@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METAR 搜尋</title>
+</head>
+<body>
+    <h1>搜尋機場 METAR 資料</h1>
+    <label for="icao">機場 ICAO 代碼:</label>
+    <input type="text" id="icao" placeholder="例如 RCTP">
+    <button onclick="searchMetar()">搜尋</button>
+
+    <h2>METAR 資料:</h2>
+    <pre id="metarOutput"></pre>
+
+    <script>
+        function searchMetar() {
+            var icao = document.getElementById("icao").value.trim().toUpperCase();
+            if (icao === "") {
+                alert("請輸入有效的ICAO代碼");
+                return;
+            }
+
+            var apiUrl = `https://aviationweather.gov/api/data/metar?ids=${icao}&format=raw`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("請求失敗，請確認ICAO代碼是否正確");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById("metarOutput").textContent = data;
+                })
+                .catch(error => {
+                    document.getElementById("metarOutput").textContent = "發生錯誤：" + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
