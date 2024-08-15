@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" sizes="16x16" href="./caldbs.ico">
-    <link rel="shortcut icon" sizes="16x16" href="./caldbs.ico" type="image/x-icon">
+    <link rel="icon" sizes="16x16"  href="./caldbs.ico">
+    <link rel="shortcut icon" sizes="16x16"  href="./caldbs.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="./appleicon.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,30 +114,6 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
-
-        /* Cute button CSS */
-        #funButton {
-            position: absolute;
-            padding: 10px 20px;
-            background-color: #ff69b4; /* Initial cute pink color */
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-radius 0.3s ease;
-            font-size: 16px;
-            font-weight: bold;
-            display: none; /* Initially hidden */
-            left: 50%; /* Example adjustment */
-            top: 420px; /* Example adjustment */
-            transform: translateX(-50%); /* Center horizontally */
-        }
-
-        #funButton:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
     </style>
 </head>
 <body>
@@ -151,16 +127,12 @@
         </form>
         <button id="redirectBtn" onclick="redirectToPage()">DIRECT BRIEFING SYSTEM</button>
         <button id="jeppesenBtn" onclick="submitJeppesenForm()">JEPPESEN CHARTS</button>
-        <button id="triggerFunButton">Fun Button</button> <!-- New button added here -->
     </div>
 
     <form id="JeppChartsForm" action="https://ww1.jeppesen.com/icharts/index.jsp" method="post" name="JeppChartsForm" style="display:none;">
         <input type="hidden" name="login-username" value="caldispatcher">
         <input type="hidden" name="login-password" value="Forwebuse1">
     </form>
-
-    <!-- Cute, Unclickable Button -->
-    <button id="funButton">Catch Me!</button>
 
     <!-- IP Address Container -->
     <div id="ip-container">
@@ -212,66 +184,6 @@
         })
         .catch(error => {
             document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
-        });
-
-        // Fun button logic
-        const button = document.getElementById('funButton');
-        const content = document.getElementById('content');
-
-        const colors = ['#ff69b4', '#ff6347', '#ffd700', '#4caf50', '#1e90ff', '#800080']; // Array of colors
-        const shapes = ['50px', '25%', '0px']; // Array of border-radius values (shapes)
-
-        function isOverlapping(x, y) {
-            const buttonRect = {
-                top: y,
-                left: x,
-                right: x + button.offsetWidth,
-                bottom: y + button.offsetHeight
-            };
-
-            const contentRect = content.getBoundingClientRect();
-
-            return !(buttonRect.right < contentRect.left || 
-                     buttonRect.left > contentRect.right || 
-                     buttonRect.bottom < contentRect.top || 
-                     buttonRect.top > contentRect.bottom);
-        }
-
-        function moveButton() {
-            let x, y;
-            const maxTries = 100; // Prevent infinite loop
-            let tries = 0;
-
-            do {
-                x = Math.random() * (window.innerWidth - button.offsetWidth);
-                y = Math.random() * (window.innerHeight - button.offsetHeight);
-                tries++;
-            } while (isOverlapping(x, y) && tries < maxTries);
-
-            button.style.left = `${x}px`;
-            button.style.top = `${y}px`;
-
-            // Change color and shape
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-            button.style.backgroundColor = randomColor;
-            button.style.borderRadius = randomShape;
-        }
-
-        // Initial random position
-        moveButton();
-
-        button.addEventListener('mouseover', moveButton);
-
-        // Handle resizing to prevent overlaps on mobile devices
-        window.addEventListener('resize', moveButton);
-
-        // New button logic
-        const triggerButton = document.getElementById('triggerFunButton');
-
-        triggerButton.addEventListener('click', () => {
-            button.style.display = 'block'; // Show the funButton if it's hidden
-            moveButton(); // Trigger the funButton behavior
         });
     </script>
 </body>
