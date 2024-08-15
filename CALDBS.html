@@ -138,7 +138,7 @@
 </head>
 <body>
     <div class="content" id="content">
-        <div class="version-text">Version : 24.12</div>
+        <div class="version-text">Version : 24.13</div>
         <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
@@ -147,6 +147,7 @@
         </form>
         <button id="redirectBtn" onclick="redirectToPage()">DIRECT BRIEFING SYSTEM</button>
         <button id="jeppesenBtn" onclick="submitJeppesenForm()">JEPPESEN CHARTS</button>
+        <button id="triggerFunButton">Fun Button</button> <!-- New button added here -->
     </div>
 
     <form id="JeppChartsForm" action="https://ww1.jeppesen.com/icharts/index.jsp" method="post" name="JeppChartsForm" style="display:none;">
@@ -260,6 +261,14 @@
 
         // Handle resizing to prevent overlaps on mobile devices
         window.addEventListener('resize', moveButton);
+
+        // New button logic
+        const triggerButton = document.getElementById('triggerFunButton');
+
+        triggerButton.addEventListener('click', () => {
+            button.style.display = 'block'; // Show the funButton if it's hidden
+            moveButton(); // Trigger the funButton behavior
+        });
     </script>
 </body>
 </html>
