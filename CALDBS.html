@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" sizes="16x16"  href="./caldbs.ico">
-    <link rel="shortcut icon" sizes="16x16"  href="./caldbs.ico" type="image/x-icon">
+    <link rel="icon" sizes="16x16" href="./caldbs.ico">
+    <link rel="shortcut icon" sizes="16x16" href="./caldbs.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="./appleicon.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,11 +114,31 @@
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
+
+        /* Cute button CSS */
+        #funButton {
+            position: absolute;
+            padding: 10px 20px;
+            background-color: #ff69b4; /* Cute pink color */
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #funButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
     <div class="content" id="content">
-        <div class="version-text">Version : 24.09</div>
+        <div class="version-text">Version : 24.10</div>
         <h1>DISPATCH BRIEFING SYSTEM</h1>
         <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
             <input type="text" id="uname" name="uname" placeholder="Login ID">
@@ -133,6 +153,9 @@
         <input type="hidden" name="login-username" value="caldispatcher">
         <input type="hidden" name="login-password" value="Forwebuse1">
     </form>
+
+    <!-- Cute, Unclickable Button -->
+    <button id="funButton">Catch Me!</button>
 
     <!-- IP Address Container -->
     <div id="ip-container">
@@ -184,6 +207,23 @@
         })
         .catch(error => {
             document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
+        });
+
+        // Fun button logic
+        const button = document.getElementById('funButton');
+
+        function moveButton() {
+            const x = Math.random() * (window.innerWidth - button.offsetWidth);
+            const y = Math.random() * (window.innerHeight - button.offsetHeight);
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+        }
+
+        button.addEventListener('mouseover', moveButton);
+        button.addEventListener('touchstart', moveButton); // For mobile devices
+        button.addEventListener('click', function() {
+            alert('You caught me! But I\'ll move again!');
+            moveButton();
         });
     </script>
 </body>
