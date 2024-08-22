@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Information Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .search-container {
+            width: 25%;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .flight-info-container {
+            width: 75%;
+            padding: 20px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .flight-info {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
+        .flight-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .flight-info p strong {
+            color: #007bff;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <h1>Flight Info</h1>
+            <form id="flightForm">
+                <label for="departureAirport">Departure Airport:</label>
+                <select id="departureAirport" name="departureAirport" required>
+                    <option value="TPE">TPE</option>
+                    <option value="TSA">TSA</option>
+                    <option value="KHH">KHH</option>
+                    <option value="RMQ">RMQ</option>
+                    <option value="HUN">HUN</option>
+                    <option value="TTT">TTT</option>
+                    <option value="MZG">MZG</option>
+                </select>
+
+                <label for="airlineId">Airline ID:</label>
+                <input type="text" id="airlineId" name="airlineId" placeholder="IATA" required>
+
+                <label for="flightNumber">Flight Number:</label>
+                <input type="text" id="flightNumber" name="flightNumber" required>
+
+                <button type="submit">Query</button>
+            </form>
+        </div>
+
+        <div id="flightInfoContainer" class="flight-info-container"></div>
+    </div>
+
+    <script>
+        function getAccessToken() {
+            const parameter = {
+                grant_type: "client_credentials",
+                client_id: "yuche0826-7e3f053e-05b0-4345",
+                client_secret: "4541eb2b-6bbd-4a5b-a025-2335227d4c96"
+            };
+
+            return fetch("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token", {
+                method: 'POST',
+                headers: {
+                    "Accept-Encoding": "br,gzip",
+                },
+                body: new URLSearchParams(parameter)
+            })
+            .then(response => response.json())
+            .then(data => data.access_token)
+            .catch(error => {
+                console.error('Error fetching access token:', error);
+                return null;
+            });
+        }
+
+        document.getElementById('flightForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            const departureAirport = document.getElementById('departureAirport').value;
+            const airlineId = document.getElementById('airlineId').value;
+            const flightNumber = document.getElementById('flightNumber').value;
+
+            getAccessToken().then(accesstoken => {
+                if (accesstoken) {
+                    const query = new URLSearchParams({
+                        format: 'JSON',
+                        '$filter': `AirlineID eq '${airlineId}' and FlightNumber eq '${flightNumber}'`
+                    }).toString();
+
+                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/FIDS/Airport/Departure/${departureAirport}?${query}`;
+
+                    fetch(url, {
+                        headers: {
+                            "authorization": "Bearer " + accesstoken,
+                            "Accept-Encoding": "br,gzip",
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const flightInfoContainer = document.getElementById('flightInfoContainer');
+                        flightInfoContainer.innerHTML = ''; // Clear any previous results
+
+                        if (data.length > 0) {
+                            data.forEach(flight => {
+                                const flightInfoDiv = document.createElement('div');
+                                flightInfoDiv.className = 'flight-info';
+                                flightInfoDiv.innerHTML = `
+                                    <p><strong>Flight Date:</strong> ${flight.FlightDate}</p>
+                                    <p><strong>Flight Number:</strong> ${flight.FlightNumber}</p>
+                                    <p><strong>Airline ID:</strong> ${flight.AirlineID}</p>
+                                    <p><strong>Departure Airport:</strong> ${flight.DepartureAirportID}</p>
+                                    <p><strong>Arrival Airport:</strong> ${flight.ArrivalAirportID}</p>
+                                    <p><strong>Scheduled Departure:</strong> ${flight.ScheduleDepartureTime}</p>
+                                    <p><strong>Actual Departure:</strong> ${flight.ActualDepartureTime}</p>
+                                    <p><strong>Departure Remark:</strong> ${flight.DepartureRemark}</p>
+                                    <p><strong>Terminal:</strong> ${flight.Terminal}</p>
+                                    <p><strong>Gate:</strong> ${flight.Gate}</p>
+                                `;
+                                flightInfoContainer.appendChild(flightInfoDiv);
+                            });
+                        } else {
+                            flightInfoContainer.innerHTML = '<p class="no-results">No flight information found.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        document.getElementById('flightInfoContainer').innerHTML = '<p class="no-results">Failed to fetch flight information. Please try again later.</p>';
+                    });
+                } else {
+                    document.getElementById('flightInfoContainer').innerHTML = '<p class="no-results">Unable to fetch access token. Please try again later.</p>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
