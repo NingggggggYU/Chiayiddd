@@ -145,7 +145,7 @@
                 <input type="text" id="airlineId" name="airlineId" placeholder="IATA" required>
 
                 <label for="flightNumber">Flight Number:</label>
-                <input type="text" id="flightNumber" name="flightNumber" placeholder="IATA" required>
+                <input type="text" id="flightNumber" name="flightNumber" required>
 
                 <button type="submit">Query</button>
             </form>
@@ -158,8 +158,8 @@
         function getAccessToken() {
             const parameter = {
                 grant_type: "client_credentials",
-                client_id: "XXXXXXXXXX-XXXXXXXX-XXXX-XXXX",
-                client_secret: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+                client_id: "yuche0826-7e3f053e-05b0-4345",
+                client_secret: "4541eb2b-6bbd-4a5b-a025-2335227d4c96"
             };
 
             return fetch("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token", {
