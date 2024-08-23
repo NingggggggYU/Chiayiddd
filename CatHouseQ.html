@@ -112,6 +112,39 @@
             padding-bottom: 10px;
         }
 
+        /* Input field and button styles */
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #question-count {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100px;
+            text-align: center;
+        }
+
+        .set-count-button {
+            background-color: #03dac6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .set-count-button:hover {
+            background-color: #018786;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 600px) {
             .button-container {
@@ -124,8 +157,13 @@
                 margin: 5px 0;
             }
 
-            #questions-container p {
-                font-size: 14px;
+            .input-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #question-count {
+                width: 100%;
             }
         }
     </style>
@@ -133,9 +171,13 @@
 <body>
     <h1>Random Question Generator</h1>
     <div class="button-container">
-        <button onclick="generateQuestions()">Generate </button>
-        <button onclick="clearQuestions()">Clear </button>
+        <button onclick="generateQuestions()">Generate</button>
+        <button onclick="clearQuestions()">Clear</button>
         <button onclick="showHistory()">Show History</button>
+    </div>
+    <div class="input-container">
+        <input type="number" id="question-count" min="1" max="30" value="8">
+        <button class="set-count-button" onclick="setQuestionCount()">Set Count</button>
     </div>
     <div id="questions-container"></div>
     
@@ -150,6 +192,7 @@
 
     <script>
         let history = [];
+        let questionCount = 8; // Default question count
 
         function getRandomInt(min, max, step = 1) {
             const range = Math.floor((max - min) / step) + 1;
@@ -175,11 +218,15 @@
         }
 
         function generateQuestions() {
+            if (questionCount < 1 || questionCount > 30) {
+                alert('Please enter a number between 1 and 30.');
+                return;
+            }
             const questions = [];
             let lastType = 0;
 
-            // Generate all 5 questions with random types ensuring no consecutive repetition
-            for (let i = 0; i < 8; i++) {
+            // Generate questions with random types ensuring no consecutive repetition
+            for (let i = 0; i < questionCount; i++) {
                 let type;
                 do {
                     type = getRandomInt(1, 3);
@@ -251,6 +298,16 @@
         function closeHistory() {
             const historyModal = document.getElementById('history-modal');
             historyModal.style.display = 'none';
+        }
+
+        function setQuestionCount() {
+            const input = document.getElementById('question-count');
+            const value = parseInt(input.value, 10);
+            if (value >= 1 && value <= 30) {
+                questionCount = value;
+            } else {
+                alert('Please enter a number between 1 and 30.');
+            }
         }
     </script>
 </body>
