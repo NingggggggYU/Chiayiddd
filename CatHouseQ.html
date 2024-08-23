@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAT HOUSE Random Question Generator</title>
+    <title>Random Question Generator</title>
     <style>
         /* CSS for modern look and mobile support */
         body {
@@ -70,8 +70,8 @@
 </head>
 <body>
     <h1>Random Question Generator</h1>
-    <button onclick="generateQuestions()">Generate</button>
-    <button onclick="clearQuestions()">Clear</button>
+    <button onclick="generateQuestions()">Generate Questions</button>
+    <button onclick="clearQuestions()">Clear Questions</button>
     <div id="questions-container"></div>
     
     <script>
@@ -102,28 +102,13 @@
             const questions = [];
             let lastType = 0;
 
-            // Generate first three unique types
-            for (let i = 1; i <= 3; i++) {
-                let question;
-                switch (i) {
-                    case 1:
-                        question = generateQuestionType1();
-                        break;
-                    case 2:
-                        question = generateQuestionType2();
-                        break;
-                    case 3:
-                        question = generateQuestionType3();
-                        break;
-                }
-                questions.push(question);
-                lastType = i;
-            }
-
-            // Generate remaining two questions without repeating the last type
-            while (questions.length < 5) {
-                let type = getRandomInt(1, 3);
-                if (type === lastType) continue; // Skip if it's the same as the last type
+            // Generate all 5 questions with random types ensuring no consecutive repetition
+            for (let i = 0; i < 5; i++) {
+                let type;
+                do {
+                    type = getRandomInt(1, 3);
+                } while (type === lastType);
+                
                 let question;
                 switch (type) {
                     case 1:
