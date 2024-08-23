@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT HOUSE Question Generator CountDown</title>
+    <style>
+        /* CSS for modern look and mobile support */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        #questions-container {
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+        }
+
+        #questions-container p {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        /* Countdown timer styles */
+        #countdown-timer {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* Modal styles */
+        #history-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #history-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+            max-height: 80%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #history-content h2 {
+            margin-top: 0;
+        }
+
+        .close-button {
+            align-self: flex-end;
+            background-color: #ff1744;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 1001; 
+            margin-bottom: 10px;
+        }
+
+        .close-button:hover {
+            background-color: #d50000;
+        }
+
+        .question-set {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            #questions-container p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Question Generator Countdown Mode</h1>
+    <div class="button-container">
+        <button onclick="generateQuestions()">Generate</button>
+        <button onclick="clearQuestions()">Clear</button>
+        <button onclick="showHistory()">Show History</button>
+    </div>
+    <div id="countdown-timer">30s</div>
+    <div id="questions-container"></div>
+    
+    <!-- Modal for displaying history -->
+    <div id="history-modal">
+        <div id="history-content">
+            <button class="close-button" onclick="closeHistory()">X</button>
+            <h2>History of Generated Questions</h2>
+            <div id="history-questions"></div>
+        </div>
+    </div>
+
+    <script>
+        let history = [];
+        let countdownInterval;
+
+        function getRandomInt(min, max, step = 1) {
+            const range = Math.floor((max - min) / step) + 1;
+            return min + Math.floor(Math.random() * range) * step;
+        }
+
+        function generateQuestionType1() {
+            const direction = Math.random() < 0.5 ? 'RIGHT' : 'LEFT';
+            const degree = getRandomInt(40, 90, 5);
+            return `TURN ${direction} ${degree} DEGREE`;
+        }
+
+        function generateQuestionType2() {
+            const action = Math.random() < 0.5 ? 'Climb' : 'Descent';
+            const feet = getRandomInt(500, 1500, 100);
+            return `${action} ${feet} Feet`;
+        }
+
+        function generateQuestionType3() {
+            const sign = Math.random() < 0.5 ? '-' : '+';
+            const speed = getRandomInt(5, 30, 5);
+            return `SPEED ${sign}${speed} KNTS`;
+        }
+
+        function generateQuestions() {
+            const questions = [];
+            let lastType = 0;
+
+            // Generate all 5 questions with random types ensuring no consecutive repetition
+            for (let i = 0; i < 5; i++) {
+                let type;
+                do {
+                    type = getRandomInt(1, 3);
+                } while (type === lastType);
+                
+                let question;
+                switch (type) {
+                    case 1:
+                        question = generateQuestionType1();
+                        break;
+                    case 2:
+                        question = generateQuestionType2();
+                        break;
+                    case 3:
+                        question = generateQuestionType3();
+                        break;
+                }
+                questions.push(question);
+                lastType = type;
+            }
+
+            // Add generated questions set to history
+            history.push(questions);
+
+            displayQuestions(questions);
+            startCountdown();
+        }
+
+        function displayQuestions(questions) {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            questions.forEach((question, index) => {
+                const p = document.createElement('p');
+                p.textContent = `${index + 1}. ${question}`;
+                container.appendChild(p);
+            });
+        }
+
+        function clearQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            stopCountdown();
+        }
+
+        function startCountdown() {
+            let timeLeft = 30;
+            const timerDisplay = document.getElementById('countdown-timer');
+            timerDisplay.textContent = `${timeLeft}s`;
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearQuestions();
+                }
+            }, 1000);
+        }
+
+        function stopCountdown() {
+            clearInterval(countdownInterval);
+            document.getElementById('countdown-timer').textContent = '30s';
+        }
+
+        function showHistory() {
+            const historyModal = document.getElementById('history-modal');
+            const historyQuestions = document.getElementById('history-questions');
+            historyQuestions.innerHTML = '';
+
+            if (history.length === 0) {
+                historyQuestions.innerHTML = '<p>No history available.</p>';
+            } else {
+                history.forEach((questionSet, setIndex) => {
+                    const setDiv = document.createElement('div');
+                    setDiv.className = 'question-set';
+                    setDiv.innerHTML = `<h3>Set ${setIndex + 1}</h3>`;
+                    
+                    questionSet.forEach((question, questionIndex) => {
+                        const p = document.createElement('p');
+                        p.textContent = `${questionIndex + 1}. ${question}`;
+                        setDiv.appendChild(p);
+                    });
+
+                    historyQuestions.appendChild(setDiv);
+                });
+            }
+
+            historyModal.style.display = 'flex';
+        }
+
+        function closeHistory() {
+            const historyModal = document.getElementById('history-modal');
+            historyModal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
