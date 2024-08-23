@@ -1,190 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" sizes="16x16"  href="./caldbs.ico">
-    <link rel="shortcut icon" sizes="16x16"  href="./caldbs.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="./appleicon.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DISPATCH BRIEFING SYSTEM</title>
+    <title>CAT HOUSE Question Generator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* CSS for modern look and mobile support */
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            position: relative;
-        }
-
-        .content {
-            display: none; /* Initially hidden */
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            position: relative;
-        }
-
-        .content h1 {
-            margin-bottom: 20px;
-            color: #007bff;
-            font-size: 21px;
-            white-space: nowrap;
-        }
-
-        .content input, 
-        .content button {
-            display: block;
-            margin: 10px auto;
-            padding: 10px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        #submitBtn {
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #submitBtn:hover {
-            background-color: #0056b3;
-        }
-
-        #redirectBtn {
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #redirectBtn:hover {
-            background-color: #45a049;
-        }
-
-        #jeppesenBtn {
-            background-color: #f39c12;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            position: absolute;
-            bottom: -48px; /* Adjust the distance to position the button in the red box area */
-            left: 50;
-            right: 0;
-            margin: 0 auto;
-            width: 180px; /* Set width to match the content's width */
-        }
-
-        #jeppesenBtn:hover {
-            background-color: #e67e22;
-        }
-
-        .version-text {
-            position: absolute;
-            top: -18px; /* Adjust to position the text at the desired location */
-            right: 5px; /* Adjust to position the text at the desired location */
-            font-size: 12px;
-            color: #808080;
-            font-weight: bold;
-        }
-
-        /* Add CSS for IP address display */
-        #ip-container {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 14px;
+            background-color: #f4f4f9;
             color: #333;
-            background-color: #fff;
-            padding: 5px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+        }
+
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
             border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        #questions-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+        }
+
+        #questions-container p {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            #questions-container p {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="content" id="content">
-        <div class="version-text">Version : 24.13</div>
-        <h1>DISPATCH BRIEFING SYSTEM</h1>
-        <form id="LoginForm" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action" method="post">
-            <input type="text" id="uname" name="uname" placeholder="Login ID">
-            <input type="password" id="pass" name="pass" placeholder="Password">
-            <button type="submit" id="submitBtn">SUBMIT</button>
-        </form>
-        <button id="redirectBtn" onclick="redirectToPage()">DIRECT BRIEFING SYSTEM</button>
-        <button id="jeppesenBtn" onclick="submitJeppesenForm()">JEPPESEN CHARTS</button>
-    </div>
-
-    <form id="JeppChartsForm" action="https://ww1.jeppesen.com/icharts/index.jsp" method="post" name="JeppChartsForm" style="display:none;">
-        <input type="hidden" name="login-username" value="caldispatcher">
-        <input type="hidden" name="login-password" value="Forwebuse1">
-    </form>
-
-    <!-- IP Address Container -->
-    <div id="ip-container">
-        <span id="ip-address">Loading IP address...</span>
-    </div>
-
+    <h1>Random Question Generator</h1>
+    <button onclick="generateQuestions()">Generate</button>
+    <button onclick="clearQuestions()">Clear</button>
+    <div id="questions-container"></div>
+    
     <script>
-        const correctPassword = "CALDBS";
-        let attemptCount = 0; // Counter for failed attempts
-        const maxAttempts = 1; // Maximum allowed attempts
+        function getRandomInt(min, max, step = 1) {
+            const range = Math.floor((max - min) / step) + 1;
+            return min + Math.floor(Math.random() * range) * step;
+        }
 
-        function checkCredentials() {
-            const password = prompt('Login WEB');
-            if (password === null) {
-                // If user cancels the prompt
-                attemptCount++;
-                if (attemptCount >= maxAttempts) {
-                    window.location.href = 'https://www.google.com'; // Redirect to Google
-                } else {
-                    checkCredentials(); // Re-prompt for password
+        function generateQuestionType1() {
+            const direction = Math.random() < 0.5 ? 'RIGHT' : 'LEFT';
+            const degree = getRandomInt(40, 90, 5);
+            return `TURN ${direction} ${degree} DEGREE`;
+        }
+
+        function generateQuestionType2() {
+            const action = Math.random() < 0.5 ? 'Climb' : 'Descent';
+            const feet = getRandomInt(500, 1500, 100);
+            return `${action} ${feet} Feet`;
+        }
+
+        function generateQuestionType3() {
+            const sign = Math.random() < 0.5 ? '-' : '+';
+            const speed = getRandomInt(5, 30, 5);
+            return `SPEED ${sign}${speed} KNTS`;
+        }
+
+        function generateQuestions() {
+            const questions = [];
+            let lastType = 0;
+
+            // Generate all 5 questions with random types ensuring no consecutive repetition
+            for (let i = 0; i < 5; i++) {
+                let type;
+                do {
+                    type = getRandomInt(1, 3);
+                } while (type === lastType);
+                
+                let question;
+                switch (type) {
+                    case 1:
+                        question = generateQuestionType1();
+                        break;
+                    case 2:
+                        question = generateQuestionType2();
+                        break;
+                    case 3:
+                        question = generateQuestionType3();
+                        break;
                 }
-            } else if (password && password.toUpperCase() === correctPassword.toUpperCase()) {
-                document.getElementById('content').style.display = 'block';
-            } else {
-                attemptCount++;
-                if (attemptCount >= maxAttempts) {
-                    window.location.href = 'https://www.google.com'; // Redirect to Google
-                } else {
-                    checkCredentials(); // Re-prompt for password
-                }
+                questions.push(question);
+                lastType = type;
             }
+
+            displayQuestions(questions);
         }
 
-        function redirectToPage() {
-            window.location.href = 'https://hdqweb02.china-airlines.com/webjc/brief/choose.action';
+        function displayQuestions(questions) {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            questions.forEach((question, index) => {
+                const p = document.createElement('p');
+                p.textContent = `${index + 1}. ${question}`;
+                container.appendChild(p);
+            });
         }
 
-        function submitJeppesenForm() {
-            document.getElementById('JeppChartsForm').submit();
+        function clearQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
         }
-
-        // Check credentials when the page loads
-        window.onload = checkCredentials;
-
-        fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('ip-address').textContent = data.ip;
-        })
-        .catch(error => {
-            document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
-        });
     </script>
 </body>
 </html>
