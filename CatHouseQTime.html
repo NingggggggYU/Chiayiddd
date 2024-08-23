@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAT HOUSE Question Generator CountDown</title>
+    <title>CAT HOUSE Question Generator</title>
     <style>
         /* CSS for modern look and mobile support */
         body {
@@ -41,7 +41,12 @@
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
+        button:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
             background-color: #3700b3;
         }
 
@@ -138,9 +143,9 @@
     </style>
 </head>
 <body>
-    <h1>Random Question Generator Countdown Mode</h1>
+    <h1>Random Question Generator</h1>
     <div class="button-container">
-        <button onclick="generateQuestions()">Generate</button>
+        <button id="generate-btn" onclick="generateQuestions()">Generate</button>
         <button onclick="clearQuestions()">Clear</button>
         <button onclick="showHistory()">Show History</button>
     </div>
@@ -159,6 +164,7 @@
     <script>
         let history = [];
         let countdownInterval;
+        let countdownRunning = false;
 
         function getRandomInt(min, max, step = 1) {
             const range = Math.floor((max - min) / step) + 1;
@@ -184,6 +190,8 @@
         }
 
         function generateQuestions() {
+            if (countdownRunning) return;
+
             const questions = [];
             let lastType = 0;
 
@@ -234,6 +242,9 @@
         }
 
         function startCountdown() {
+            countdownRunning = true;
+            document.getElementById('generate-btn').disabled = true;
+
             let timeLeft = 30;
             const timerDisplay = document.getElementById('countdown-timer');
             timerDisplay.textContent = `${timeLeft}s`;
@@ -251,6 +262,8 @@
         function stopCountdown() {
             clearInterval(countdownInterval);
             document.getElementById('countdown-timer').textContent = '30s';
+            countdownRunning = false;
+            document.getElementById('generate-btn').disabled = false;
         }
 
         function showHistory() {
