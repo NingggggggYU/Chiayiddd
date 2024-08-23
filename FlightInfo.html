@@ -149,7 +149,7 @@
                 </select>
 
                 <label for="airlineId">Airline ID:</label>
-                <input type="text" id="airlineId" name="airlineId" placeholder="IATA" required>
+                <input type="text" id="airlineId" name="airlineId" placeholder="IATA" required pattern="[A-Za-z0-9]*">
 
                 <label for="flightNumber">Flight Number:</label>
                 <input type="text" id="flightNumber" name="flightNumber" required>
@@ -256,6 +256,11 @@
 
             const queryType = document.getElementById('queryType').value;
             fetchFlightData(queryType);
+            
+        document.getElementById('airlineId').addEventListener('input', function (event) {
+        // 將輸入的值轉換為大寫
+        event.target.value = event.target.value.toUpperCase();
+            
         });
     </script>
 </body>
