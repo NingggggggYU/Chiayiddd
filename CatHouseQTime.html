@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAT HOUSE Question Generator</title>
+    <title>CAT HOUSE Question Generator Countdown Mode</title>
     <style>
         /* CSS for modern look and mobile support */
         body {
@@ -69,6 +69,19 @@
             font-size: 20px;
             font-weight: bold;
             margin: 20px 0;
+        }
+
+        #timer-settings {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #timer-input {
+            width: 100px;
+            padding: 5px;
+            font-size: 16px;
         }
 
         /* Modal styles */
@@ -143,7 +156,11 @@
     </style>
 </head>
 <body>
-    <h1>Random Question Generator</h1>
+    <h1>Random Question Generator Countdown Mode</h1>
+    <div id="timer-settings">
+        <input type="number" id="timer-input" min="1" max="300" value="30">
+        <button onclick="setCountdown()">Set Countdown</button>
+    </div>
     <div class="button-container">
         <button id="generate-btn" onclick="generateQuestions()">Generate</button>
         <button onclick="clearQuestions()">Clear</button>
@@ -165,6 +182,7 @@
         let history = [];
         let countdownInterval;
         let countdownRunning = false;
+        let countdownDuration = 30;
 
         function getRandomInt(min, max, step = 1) {
             const range = Math.floor((max - min) / step) + 1;
@@ -245,7 +263,7 @@
             countdownRunning = true;
             document.getElementById('generate-btn').disabled = true;
 
-            let timeLeft = 30;
+            let timeLeft = countdownDuration;
             const timerDisplay = document.getElementById('countdown-timer');
             timerDisplay.textContent = `${timeLeft}s`;
 
@@ -261,9 +279,20 @@
 
         function stopCountdown() {
             clearInterval(countdownInterval);
-            document.getElementById('countdown-timer').textContent = '30s';
+            document.getElementById('countdown-timer').textContent = `${countdownDuration}s`;
             countdownRunning = false;
             document.getElementById('generate-btn').disabled = false;
+        }
+
+        function setCountdown() {
+            const timerInput = document.getElementById('timer-input');
+            const value = parseInt(timerInput.value, 10);
+            if (value >= 1 && value <= 300) {
+                countdownDuration = value;
+                stopCountdown();
+            } else {
+                alert('Please enter a value between 1 and 300 seconds.');
+            }
         }
 
         function showHistory() {
