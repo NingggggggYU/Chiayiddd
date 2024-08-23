@@ -50,12 +50,13 @@
             background-color: #3700b3;
         }
 
-        #set-countdown-btn {
-            background-color: #ff5722; /* Updated color for visibility */
+        /* Specific button styles */
+        #set-countdown-btn, #set-speed-btn {
+            background-color: #0085ea; /* Match the color */
         }
 
-        #set-countdown-btn:hover {
-            background-color: #e64a19;
+        #set-countdown-btn:hover, #set-speed-btn:hover {
+            background-color: #3700b3; /* Match the hover color */
         }
 
         #questions-container {
@@ -79,14 +80,14 @@
             margin: 20px 0;
         }
 
-        #timer-settings {
+        #timer-settings, #speed-settings {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
         }
 
-        #timer-input {
+        #timer-input, #speed-input {
             width: 100px;
             padding: 8px;
             font-size: 16px;
@@ -96,7 +97,7 @@
             transition: border-color 0.3s ease;
         }
 
-        #timer-input:focus {
+        #timer-input:focus, #speed-input:focus {
             border-color: #3700b3;
         }
 
@@ -177,6 +178,10 @@
         <input type="number" id="timer-input" min="1" max="300" value="30">
         <button id="set-countdown-btn" onclick="setCountdown()">Set Countdown</button>
     </div>
+    <div id="speed-settings">
+        <input type="number" id="speed-input" min="220" max="280" value="250">
+        <button id="set-speed-btn" onclick="setSpeedInitial()">Set Initial Speed</button>
+    </div>
     <div class="button-container">
         <button id="generate-btn" onclick="generateQuestions()">Generate</button>
         <button onclick="clearQuestions()">Clear</button>
@@ -199,6 +204,7 @@
         let countdownInterval;
         let countdownRunning = false;
         let countdownDuration = 30;
+        let currentSpeed = 250; // Default initial speed
 
         function getRandomInt(min, max, step = 1) {
             const range = Math.floor((max - min) / step) + 1;
@@ -218,9 +224,28 @@
         }
 
         function generateQuestionType3() {
-            const sign = Math.random() < 0.5 ? '-' : '+';
-            const speed = getRandomInt(5, 30, 5);
-            return `SPEED ${sign}${speed} KNTS`;
+            let validSpeedChange = false;
+            let speedChange;
+            let newSpeed;
+
+            while (!validSpeedChange) {
+                // Ensure the random change keeps the speed within 220-280
+                const minChange = Math.max(-30, 220 - currentSpeed);
+                const maxChange = Math.min(30, 280 - currentSpeed);
+
+                speedChange = getRandomInt(minChange, maxChange, 5);
+                newSpeed = currentSpeed + speedChange;
+                
+                // Ensure speedChange is not 0
+                if (speedChange !== 0) {
+                    validSpeedChange = true;
+                }
+            }
+
+            currentSpeed = newSpeed; // Update the current speed
+
+            const sign = speedChange > 0 ? '+' : '';
+            return `SPEED ${sign}${speedChange} KNTS`;
         }
 
         function generateQuestions() {
@@ -308,6 +333,16 @@
                 stopCountdown();
             } else {
                 alert('Please enter a value between 1 and 300 seconds.');
+            }
+        }
+
+        function setSpeedInitial() {
+            const speedInput = document.getElementById('speed-input');
+            const value = parseInt(speedInput.value, 10);
+            if (value >= 220 && value <= 280) {
+                currentSpeed = value;
+            } else {
+                alert('Please enter a value between 220 and 280.');
             }
         }
 
