@@ -145,6 +145,12 @@
             background-color: #018786;
         }
 
+        .count-display {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #333;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 600px) {
             .button-container {
@@ -179,6 +185,7 @@
         <input type="number" id="question-count" min="1" max="30" value="8">
         <button class="set-count-button" onclick="setQuestionCount()">Set Count</button>
     </div>
+    <div class="count-display" id="current-count">Next Generate Count : 8</div>
     <div id="questions-container"></div>
     
     <!-- Modal for displaying history -->
@@ -302,12 +309,13 @@
 
         function setQuestionCount() {
             const input = document.getElementById('question-count');
-            const value = parseInt(input.value, 10);
-            if (value >= 1 && value <= 30) {
-                questionCount = value;
-            } else {
+            const count = parseInt(input.value, 10);
+            if (count < 1 || count > 30) {
                 alert('Please enter a number between 1 and 30.');
+                return;
             }
+            questionCount = count;
+            document.getElementById('current-count').textContent = `Next Generate Count : ${questionCount}`;
         }
     </script>
 </body>
