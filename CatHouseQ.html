@@ -120,7 +120,8 @@
             margin-bottom: 20px;
         }
 
-        #question-count {
+        #question-count,
+        #speed-initial {
             font-size: 16px;
             padding: 10px;
             border-radius: 5px;
@@ -168,7 +169,8 @@
                 align-items: stretch;
             }
 
-            #question-count {
+            #question-count,
+            #speed-initial {
                 width: 100%;
             }
         }
@@ -185,7 +187,12 @@
         <input type="number" id="question-count" min="1" max="30" value="8">
         <button class="set-count-button" onclick="setQuestionCount()">Set Count</button>
     </div>
-    <div class="count-display" id="current-count">Next Generate Count : 8</div>
+    <div class="input-container">
+        <input type="number" id="speed-initial" min="220" max="280" value="250">
+        <button class="set-count-button" onclick="setSpeedInitial()">Set Initial Speed</button>
+    </div>
+    <div class="count-display" id="current-count">Next Generate Count: 8</div>
+    <div class="count-display" id="current-speed">Initial Speed: 250</div>
     <div id="questions-container"></div>
     
     <!-- Modal for displaying history -->
@@ -200,6 +207,7 @@
     <script>
         let history = [];
         let questionCount = 8; // Default question count
+        let currentSpeed = 250; // Default initial speed
 
         function getRandomInt(min, max, step = 1) {
             const range = Math.floor((max - min) / step) + 1;
@@ -219,9 +227,28 @@
         }
 
         function generateQuestionType3() {
-            const sign = Math.random() < 0.5 ? '-' : '+';
-            const speed = getRandomInt(5, 30, 5);
-            return `SPEED ${sign}${speed} KNTS`;
+            let validSpeedChange = false;
+            let speedChange;
+            let newSpeed;
+
+            while (!validSpeedChange) {
+                // Ensure the random change keeps the speed within 220-280
+                const minChange = Math.max(-30, 220 - currentSpeed);
+                const maxChange = Math.min(30, 280 - currentSpeed);
+
+                speedChange = getRandomInt(minChange, maxChange, 5);
+                newSpeed = currentSpeed + speedChange;
+                
+                // Ensure speedChange is not 0
+                if (speedChange !== 0) {
+                    validSpeedChange = true;
+                }
+            }
+
+            currentSpeed = newSpeed; // Update the current speed
+
+            const sign = speedChange > 0 ? '+' : '';
+            return `SPEED ${sign}${speedChange} KNTS`;
         }
 
         function generateQuestions() {
@@ -315,7 +342,18 @@
                 return;
             }
             questionCount = count;
-            document.getElementById('current-count').textContent = `Next Generate Count : ${questionCount}`;
+            document.getElementById('current-count').textContent = `Next Generate Count: ${questionCount}`;
+        }
+
+        function setSpeedInitial() {
+            const input = document.getElementById('speed-initial');
+            const speed = parseInt(input.value, 10);
+            if (speed < 220 || speed > 280) {
+                alert('Please enter a speed between 220 and 280.');
+                return;
+            }
+            currentSpeed = speed;
+            document.getElementById('current-speed').textContent = `Initial Speed: ${currentSpeed}`;
         }
     </script>
 </body>
