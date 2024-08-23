@@ -11,18 +11,17 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column; /* Allow vertical scrolling */
             height: 100vh;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow: hidden;
         }
 
         .container {
             display: flex;
             flex-direction: row;
             width: 100%;
-            min-height: 100vh; /* Ensure minimum height for scrolling */
+            height: 100%;
             overflow: hidden;
-            flex-wrap: nowrap; /* Prevent wrapping on larger screens */
+            flex-wrap: wrap; /* Allows wrapping on small screens */
         }
 
         .search-container {
@@ -80,9 +79,8 @@
         .flight-info-container {
             flex: 1;
             padding: 20px;
-            overflow-y: auto; /* Allows vertical scrolling */
+            overflow-y: auto;
             box-sizing: border-box;
-            height: calc(100vh - 40px); /* Adjust the height according to your design */
         }
 
         .flight-info {
@@ -118,13 +116,11 @@
 
             .container {
                 flex-direction: column;
-                overflow-y: auto; /* Enable vertical scrolling */
             }
 
             .flight-info-container {
                 width: 100%;
                 margin-top: 20px;
-                height: auto; /* Allow full height for mobile */
             }
         }
     </style>
@@ -134,6 +130,12 @@
         <div class="search-container">
             <h1>Flight Info</h1>
             <form id="flightForm">
+                <label for="queryType">Query Type:</label>
+                <select id="queryType" name="queryType" required>
+                    <option value="departure">Departure</option>
+                    <option value="arrival">Arrival</option>
+                </select>
+
                 <label for="departureAirport">Departure Airport:</label>
                 <select id="departureAirport" name="departureAirport" required>
                     <option value="TPE">TPE</option>
@@ -181,9 +183,7 @@
             });
         }
 
-        document.getElementById('flightForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting the traditional way
-
+        function fetchFlightData(queryType) {
             const departureAirport = document.getElementById('departureAirport').value;
             const airlineId = document.getElementById('airlineId').value;
             const flightNumber = document.getElementById('flightNumber').value;
@@ -195,7 +195,7 @@
                         '$filter': `AirlineID eq '${airlineId}' and FlightNumber eq '${flightNumber}'`
                     }).toString();
 
-                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/FIDS/Airport/Departure/${departureAirport}?${query}`;
+                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/FIDS/Airport/${queryType === 'arrival' ? 'Arrival' : 'Departure'}/${departureAirport}?${query}`;
 
                     fetch(url, {
                         headers: {
@@ -218,11 +218,21 @@
                                     <p><strong>Airline ID:</strong> ${flight.AirlineID}</p>
                                     <p><strong>Departure Airport:</strong> ${flight.DepartureAirportID}</p>
                                     <p><strong>Arrival Airport:</strong> ${flight.ArrivalAirportID}</p>
+                                    ${queryType === 'departure' ? `
                                     <p><strong>Scheduled Departure:</strong> ${flight.ScheduleDepartureTime}</p>
                                     <p><strong>Actual Departure:</strong> ${flight.ActualDepartureTime}</p>
                                     <p><strong>Departure Remark:</strong> ${flight.DepartureRemark}</p>
                                     <p><strong>Terminal:</strong> ${flight.Terminal}</p>
                                     <p><strong>Gate:</strong> ${flight.Gate}</p>
+                                    ` : `
+                                    <p><strong>Scheduled Arrival:</strong> ${flight.ScheduleArrivalTime}</p>
+                                    <p><strong>Actual Arrival:</strong> ${flight.ActualArrivalTime}</p>
+                                    <p><strong>Estimated Arrival:</strong> ${flight.EstimatedArrivalTime}</p>
+                                    <p><strong>Arrival Remark:</strong> ${flight.ArrivalRemark}</p>
+                                    <p><strong>Terminal:</strong> ${flight.Terminal}</p>
+                                    <p><strong>Gate:</strong> ${flight.Gate}</p>
+                                    <p><strong>Baggage Claim:</strong> ${flight.BaggageClaim || 'N/A'}</p>
+                                    `}
                                 `;
                                 flightInfoContainer.appendChild(flightInfoDiv);
                             });
@@ -238,6 +248,13 @@
                     document.getElementById('flightInfoContainer').innerHTML = '<p class="no-results">Unable to fetch access token. Please try again later.</p>';
                 }
             });
+        }
+
+        document.getElementById('flightForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            const queryType = document.getElementById('queryType').value;
+            fetchFlightData(queryType);
         });
     </script>
 </body>
