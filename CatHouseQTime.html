@@ -50,6 +50,14 @@
             background-color: #3700b3;
         }
 
+        #set-countdown-btn {
+            background-color: #03a9f4; /* Light blue color for visibility */
+        }
+
+        #set-countdown-btn:hover {
+            background-color: #0288d1;
+        }
+
         #questions-container {
             width: 100%;
             max-width: 600px;
@@ -144,9 +152,20 @@
                 align-items: stretch;
             }
 
-            button {
+            .button-container > button {
                 width: 100%;
                 margin: 5px 0;
+            }
+
+            .button-container > button:nth-of-type(1),
+            .button-container > button:nth-of-type(2) {
+                display: inline-block;
+                width: calc(50% - 5px);
+            }
+
+            .button-container > button:nth-of-type(3) {
+                display: block;
+                width: 100%;
             }
 
             #questions-container p {
@@ -159,7 +178,7 @@
     <h1>Random Question Generator Countdown Mode</h1>
     <div id="timer-settings">
         <input type="number" id="timer-input" min="1" max="300" value="30">
-        <button onclick="setCountdown()">Set Countdown</button>
+        <button id="set-countdown-btn" onclick="setCountdown()">Set Countdown</button>
     </div>
     <div class="button-container">
         <button id="generate-btn" onclick="generateQuestions()">Generate</button>
