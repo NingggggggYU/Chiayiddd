@@ -11,9 +11,9 @@
             margin: 0;
             padding: 0;
             display: flex;
-	    flex-direction: column; /* 讓內容垂直排列 */
-    	    overflow-x: hidden; /* 禁止橫向滾動 */
-    	    overflow-y: auto; /* 允許垂直滾動 */
+            flex-direction: column;
+            overflow-x: hidden; /* 禁止橫向滾動 */
+            overflow-y: auto; /* 允許垂直滾動 */
         }
 
         .container {
@@ -21,7 +21,7 @@
             flex-direction: row;
             width: 100%;
             flex-wrap: wrap; /* Allows wrapping on small screens */
-	    overflow: auto;
+            overflow: auto;
         }
 
         .search-container {
@@ -62,23 +62,23 @@
             width: 100%;
         }
 
-	input[type="number"] {
-   	    padding: 10px;
-  	    margin-bottom: 15px;
-	    border: 1px solid #ddd;
-   	    border-radius: 4px;
- 	    box-sizing: border-box;
-    	    font-size: 16px;
-    	    width: 100%;
+        input[type="number"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            width: 100%;
             -moz-appearance: textfield; /* 移除 Firefox 的箭頭按鈕 */
-}
+        }
 
-	    input[type="number"]::-webkit-outer-spin-button,
-	    input[type="number"]::-webkit-inner-spin-button {
-  	    -webkit-appearance: none; /* 移除 Chrome, Safari, Edge 的箭頭按鈕 */
- 	    margin: 0;
-}
-	    
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* 移除 Chrome, Safari, Edge 的箭頭按鈕 */
+            margin: 0;
+        }
+
         button {
             padding: 10px;
             background-color: #007bff;
@@ -125,6 +125,18 @@
             color: #888;
         }
 
+        .last-updated {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .search-container {
@@ -139,6 +151,11 @@
             .flight-info-container {
                 width: 100%;
                 margin-top: 20px;
+            }
+
+            .last-updated {
+                font-size: 10px;
+                padding: 3px 7px;
             }
         }
     </style>
@@ -177,6 +194,8 @@
 
         <div id="flightInfoContainer" class="flight-info-container"></div>
     </div>
+
+    <div id="lastUpdated" class="last-updated"></div>
 
     <script>
         function getAccessToken() {
@@ -249,36 +268,47 @@
                                     <p><strong>Arrival Remark:</strong> ${flight.ArrivalRemark}</p>
                                     <p><strong>Terminal:</strong> ${flight.Terminal}</p>
                                     <p><strong>Gate:</strong> ${flight.Gate}</p>
-                                    <p><strong>Baggage Claim:</strong> ${flight.BaggageClaim || 'N/A'}</p>
+                                    <p><strong>Baggage Claim:</strong> ${flight.BaggageClaim}</p>
                                     `}
                                 `;
                                 flightInfoContainer.appendChild(flightInfoDiv);
                             });
                         } else {
-                            flightInfoContainer.innerHTML = '<p class="no-results">No flight information found.</p>';
+                            flightInfoContainer.innerHTML = '<div class="no-results">No flight information available.</div>';
                         }
+
+                        updateLastUpdatedTime();
                     })
                     .catch(error => {
-                        console.error('Error fetching data:', error);
-                        document.getElementById('flightInfoContainer').innerHTML = '<p class="no-results">Failed to fetch flight information. Please try again later.</p>';
+                        console.error('Error fetching flight data:', error);
                     });
-                } else {
-                    document.getElementById('flightInfoContainer').innerHTML = '<p class="no-results">Failed to get access token. Please try again later.</p>';
                 }
             });
         }
 
-        document.getElementById('flightForm').addEventListener('submit', function(event) {
+        function updateLastUpdatedTime() {
+            const now = new Date();
+            const formattedTime = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('lastUpdated').innerText = 'Last updated: ' + formattedTime;
+        }
+
+        document.getElementById('flightForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const queryType = document.getElementById('queryType').value;
             fetchFlightData(queryType);
         });
 
-        // Automatically convert input to uppercase for airlineId and only allow letters and numbers
-        document.getElementById('airlineId').addEventListener('input', function (event) {
-            // Remove any non-alphanumeric characters and convert to uppercase
-            event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-        });
+        // Auto-refresh every 180 seconds
+        setInterval(function () {
+            const queryType = document.getElementById('queryType').value;
+            fetchFlightData(queryType);
+        }, 180000); // 180 seconds
+
+        // Initial load
+        window.onload = function () {
+            const queryType = document.getElementById('queryType').value;
+            fetchFlightData(queryType);
+        };
     </script>
 </body>
 </html>
