@@ -30,6 +30,28 @@
 	    z-index:1000;
         }
     </style>
+    <script type="text/javascript">
+        var warningString = "";
+        document.cookie = 'acceptsCookies=yes';
+        if(document.cookie == ''){
+          document.write(warningString);
+        }
+        else{
+          document.cookie = 'acceptsCookies=yes; expires=Fri, 13-Apr-1970 00:00:00 GMT';
+          // Uncomment the following line for JavaScript redirection
+          // document.cookie = 'ISAMOriginalURL=' + encodeURIComponent(window.location) + "; Path=/;";
+		  if(window.location.pathname != "/pkmslogin.form"){
+            document.cookie = 'ISAMOriginalURL=' + encodeURIComponent(window.location) + "; Path=/;";
+          }
+        }
+     </script>
+     <noscript>
+        <div id="browser-notice" class="bg-warning text-center">
+        <b>警告：</b> 若要保留您的登入階段作業，請確定<br/>
+           您的瀏覽器已配置為接受 Cookie。
+        </div>
+     </noscript>
+	
 </head>
 <body>
     <div id="main">
