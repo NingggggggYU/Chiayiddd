@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" sizes="16x16"  href="./caldbs.ico">
+    <link rel="shortcut icon" sizes="16x16"  href="./caldbs.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="./appleicon.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DISPATCH BRIEFING SYSTEM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        .content {
+            display: none; /* Initially hidden */
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            position: relative;
+        }
+
+        .content h1 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 21px;
+            white-space: nowrap;
+        }
+
+        .content input, 
+        .content button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        #submitBtn {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #submitBtn:hover {
+            background-color: #0056b3;
+        }
+
+        #redirectBtn {
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #redirectBtn:hover {
+            background-color: #45a049;
+        }
+
+        #jeppesenBtn {
+            background-color: #f39c12;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            bottom: -48px; /* Adjust the distance to position the button in the red box area */
+            left: 50;
+            right: 0;
+            margin: 0 auto;
+            width: 180px; /* Set width to match the content's width */
+        }
+
+        #jeppesenBtn:hover {
+            background-color: #e67e22;
+        }
+
+        .version-text {
+            position: absolute;
+            top: -18px; /* Adjust to position the text at the desired location */
+            right: 5px; /* Adjust to position the text at the desired location */
+            font-size: 12px;
+            color: #808080;
+            font-weight: bold;
+        }
+
+        /* Add CSS for IP address display */
+        #ip-container {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="version-text">Version : 24.15</div>
+    <div id="main">
+      <form class="login-container" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
+        <!-- main-header Start-->
+        <div id="main-header">
+          <div>
+            <img src="chinaairlinesicon.png" alt="China Airlines Logo">
+          </div>
+          <h1 id="page-title">中華航空系統登入驗證</h1>
+          <p id="page-title-en">China Airlines System Login Verification</p>
+          <div class="intro">
+          </div>
+        </div>
+        <!-- main-header End-->
+
+        <!-- login-inputs Start-->
+        <div id="main-content" class="login-inputs">
+
+          <div class="a-form-control">
+            <label class="form-label" for="username">使用者名稱 / Your ID</label>
+            <input class="input-field " placeholder="" id="uname" type="text" name="username">
+          </div>
+          <div class="a-form-control" style="position: relative; display:inline-block; width:100%">
+            <label class="form-label" for="password">密碼 / Password</label>
+            <input class="input-field " placeholder="" id="pass" type="password" name="password" autocomplete="off" onkeyup="showEye();">
+	    <span style="position: absolute;right: 5px;top:24px ;z-index: 100;">
+    	<svg display="inline" id="svgnode" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+        <g id="eyeclose" display="none" pointer-events="all" cursor="pointer" fill="none" fill-rule="evenodd">
+        	<path d="M0 0h24v24H0z"></path>
+        	<g stroke="#23569D" stroke-linecap="round" stroke-width="1.25">
+            <path d="M2.237 9c0 2.143 3.958 7.5 9.896 7.5 5.937 0 9.896-5.357 9.896-7.5M11.514 16.5V19M6.445 15.167l-1.21 2.166M17.08 15.25l1.238 2.5M3.474 12.125 1 13.375M20.887 12.165l2.096 1.25"></path>
+        	</g>
+    	</g>
+
+    	<g id="eyes" display="none" pointer-events="all" cursor="pointer" fill="none" fill-rule="evenodd">
+        	<path id="eyes" d="M0 0h24v24H0z"></path>
+        	<g transform="translate(1 5)" stroke="#23569D">
+            	<path d="M11 15c6.6 0 11-5.357 11-7.5S17.6 0 11 0 0 5.357 0 7.5 4.4 15 11 15z" stroke-width="1.25"></path>
+            	<ellipse fill="#23569D" cx="11" cy="7.5" rx="3.667" ry="3.75"></ellipse>
+        	</g>
+   	 </g>
+</svg>
+
+  	   </span>
+          </div>
+
+          <input type="hidden" name="login-form-type" value="pwd">
+          <input type="hidden" name="token" value="Unknown">
+
+          <!-- error-box Start-->
+          <div class="error-box" id="error-box">
+            <img style="float:left" src="error.png">
+            <div id="errId"></div>
+          </div>
+          <!-- error-box End-->
+
+
+          <p class="a-form-control-exe">
+            <input id="submitBtn" class="btn btn-primary" type="submit" value="登入 / Login">
+          </p>
+
+          <div class="sub-links">
+            <p class="text-center">
+              <a href="https://hdqweb02.china-airlines.com/webjc/brief/choose.action">DISPATCH BRIEFING SYSTEM</a>
+            </p>
+          </div>
+
+
+
+        </div>
+        <!-- login-inputs End-->
+
+      </form>
+      </div>
+
+    <!-- IP Address Container -->
+    <div id="ip-container">
+        <span id="ip-address">Loading IP address...</span>
+    </div>
+
+    <script>
+        const correctPassword = "CALDBS";
+        let attemptCount = 0; // Counter for failed attempts
+        const maxAttempts = 1; // Maximum allowed attempts
+
+        function checkCredentials() {
+            const password = prompt('Login WEB');
+            if (password === null) {
+                // If user cancels the prompt
+                attemptCount++;
+                if (attemptCount >= maxAttempts) {
+                    window.location.href = 'https://iam.china-airlines.com/mga/sps/auth'; // Redirect to CI iam
+                } else {
+                    checkCredentials(); // Re-prompt for password
+                }
+            } else if (password && password.toUpperCase() === correctPassword.toUpperCase()) {
+                document.getElementById('content').style.display = 'block';
+            } else {
+                attemptCount++;
+                if (attemptCount >= maxAttempts) {
+                    window.location.href = 'https://iam.china-airlines.com/mga/sps/auth'; // Redirect to CI iam
+                } else {
+                    checkCredentials(); // Re-prompt for password
+                }
+            }
+        }
+
+        window.onload = checkCredentials;
+
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('ip-address').textContent = data.ip;
+        })
+        .catch(error => {
+            document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
+        });
+    </script>
+</body>
+</html>
