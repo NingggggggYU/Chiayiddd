@@ -71,7 +71,7 @@
 </head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 24.25</div>
+      <div class="version-text">Version : 24.26</div>
       <form class="login-container" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
         <!-- main-header Start-->
         <div id="main-header">
@@ -173,17 +173,42 @@
 	const togglePasswordButton = document.getElementById('toggle-password');
 	const passwordIcon = document.getElementById('password-icon');
 
-	togglePasswordButton.addEventListener('mousedown', function() {
- 	   passwordField.type = 'text';
-	});
+	// Function to toggle password visibility
+	function togglePasswordVisibility() {
+ 	   if (passwordField.type === 'password') {
+      	  passwordField.type = 'text';  // Show password
+      	  passwordIcon.src = 'eye-close-icon.svg';  // Change icon to indicate password is visible
+ 	   } else {
+    	    passwordField.type = 'password';  // Hide password
+    	    passwordIcon.src = 'eye-icon.svg';  // Change icon back to original
+  	  }
+	}
 
-	togglePasswordButton.addEventListener('mouseup', function() {
-	    passwordField.type = 'password';
-	});
+	// Check if the device is a mobile device
+	function isMobileDevice() {
+	    return /Mobi|Android/i.test(navigator.userAgent);
+	}
 
-	togglePasswordButton.addEventListener('mouseleave', function() {
-  	  passwordField.type = 'password';
-	});
+	if (isMobileDevice()) {
+	    // Mobile behavior: toggle on click
+	    togglePasswordButton.addEventListener('click', function() {
+  	      togglePasswordVisibility();
+  	  });
+	} else {
+	    // Desktop behavior: show on mousedown, hide on mouseup or mouseleave
+	    togglePasswordButton.addEventListener('mousedown', function() {
+ 	       passwordField.type = 'text';  // Show password
+ 	   });
+    
+ 	   togglePasswordButton.addEventListener('mouseup', function() {
+ 	       passwordField.type = 'password';  // Hide password
+ 	   });
+    
+  	  togglePasswordButton.addEventListener('mouseleave', function() {
+  	      passwordField.type = 'password';  // Hide password when cursor leaves the button
+	    });
+	}
+
     </script>
 </body>
 </html>
