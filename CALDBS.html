@@ -84,11 +84,22 @@
             <input id="btn-submitButton" class="btn btn-primary" type="submit" value="登入 / Login">
           </p>
 
+	  <input type="hidden" name="login-form-type" value="pwd">
+          <input type="hidden" name="token" value="Unknown">
+
+          <!-- error-box Start-->
+          <div class="error-box" id="error-box">
+            <img style="float:left" src="error.png">
+            <div id="errId"></div>
+          </div>
+          <!-- error-box End-->
+
           <div class="sub-links">
             <p class="text-center">
               <a href="https://hdqweb02.china-airlines.com/webjc/brief/choose.action">簽派簡報系統 Dispatch Briefing System</a>
             </p>
           </div>
+		
 		<!-- IP Address Container -->
     	<div id="ip-container">
         <span id="ip-address">Loading IP address...</span>
