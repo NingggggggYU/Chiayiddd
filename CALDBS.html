@@ -94,28 +94,10 @@
           </div>
           <div class="a-form-control" style="position: relative; display:inline-block; width:100%">
             <label class="form-label" for="password">密碼 / Password</label>
-            <input class="input-field " placeholder="" id="pass" type="password" name="pass" autocomplete="off" onkeyup="showEye();">
-	    <span style="position: absolute;right: 5px;top:24px ;z-index: 100;">
-    		<svg display="inline" id="svgnode" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-
-      		  <g id="eyeclose" display="none" pointer-events="all" cursor="pointer" fill="none" fill-rule="evenodd" style="display: inline;">
-        		<path d="M0 0h24v24H0z"></path>
-         	  <g stroke="#23569D" stroke-linecap="round" stroke-width="1.25">
-          		<path d="M2.237 9c0 2.143 3.958 7.5 9.896 7.5 5.937 0 9.896-5.357 9.896-7.5M11.514 16.5V19M6.445 15.167l-1.21 2.166M17.08 15.25l1.238 2.5M3.474 12.125 1 13.375M20.887 12.165l2.096 1.25"></path>
-        	  </g>
-    	 </g>
-
-    		<g id="eyes" display="none" pointer-events="all" cursor="pointer" fill="none" fill-rule="evenodd" style="display: none;">
-        		<path id="eyes" d="M0 0h24v24H0z"></path>
-        	<g transform="translate(1 5)" stroke="#23569D">
-            		<path d="M11 15c6.6 0 11-5.357 11-7.5S17.6 0 11 0 0 5.357 0 7.5 4.4 15 11 15z" stroke-width="1.25"></path>
-            	<ellipse fill="#23569D" cx="11" cy="7.5" rx="3.667" ry="3.75"></ellipse>
-        	</g>
-   	 </g>
-	 </svg>
-
-  	   </span>
-	
+            <input class="input-field " placeholder="" id="pass" type="password" name="pass" autocomplete="off">
+	    <button type="button" id="toggle-password" class="password-toggle">
+		    <img src="eye-icon.svg" alt="Show/Hide Password" id="password-icon">
+	    </button>
           </div>
 
           <input type="hidden" name="login-form-type" value="pwd">
@@ -187,56 +169,45 @@
             document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
         });
 
-	 var oPaswd = document.getElementById("password");
-   	 var oEyes  = document.getElementById("eyes");
-   	 var oEyesclose  = document.getElementById("eyeclose");
-   	 var oSvgNode  = document.getElementById("svgnode");
-   
- 
-    		function showEye() {
-		 
-	  
-        	     if (oPaswd.value.trim().length != 0){
-        
-	     	oEyesclose.style.display = "inline" ;
-	     	oEyes.style.display = "none" ;
+	const passwordField = document.getElementById('pass');
+	const togglePasswordButton = document.getElementById('toggle-password');
+	const passwordIcon = document.getElementById('password-icon');
 
-	      }else{
-	     	oEyesclose.style.display = "none" ;
-	     	oEyes.style.display = "none" ;
-              }
-	      
-       }
+	// Function to toggle password visibility
+	function togglePasswordVisibility() {
+ 	   if (passwordField.type === 'password') {
+      	  passwordField.type = 'text';  // Show password
+      	  passwordIcon.src = 'eye-close-icon.svg';  // Change icon to indicate password is visible
+ 	   } else {
+    	    passwordField.type = 'password';  // Hide password
+    	    passwordIcon.src = 'eye-icon.svg';  // Change icon back to original
+  	  }
+	}
 
+	// Check if the device is a mobile device
+	function isMobileDevice() {
+	    return /Mobi|Android/i.test(navigator.userAgent);
+	}
 
-       
-	
-
-  	  oSvgNode.onclick = function () {
-	
-
-	if (oPaswd.type == "password"){
-		oPaswd.type = "text";
-	     	oEyesclose.style.display = "none" ;
-	     	oEyes.style.display = "inline" ;
-	  	    
-	        setTimeout(function(){
-		      oPaswd.type = 'password';
-
-		      if (oPaswd.value.trim().length != 0){
-		         oPaswd.type = "password";
-	     	         oEyesclose.style.display = "inline" ;
-	     	         oEyes.style.display = "none";
-                       }
-
-   	             },3000);
-	     
-	}else{
-	    oPaswd.type = 'password';
-	    oEyesclose.style.display = "inline" ;
-	    oEyes.style.display = "none" ;
-        }
-   };
+	if (isMobileDevice()) {
+	    // Mobile behavior: toggle on click
+	    togglePasswordButton.addEventListener('click', function() {
+  	      togglePasswordVisibility();
+  	  });
+	} else {
+	    // Desktop behavior: show on mousedown, hide on mouseup or mouseleave
+	    togglePasswordButton.addEventListener('mousedown', function() {
+ 	       passwordField.type = 'text';  // Show password
+ 	   });
+    
+ 	   togglePasswordButton.addEventListener('mouseup', function() {
+ 	       passwordField.type = 'password';  // Hide password
+ 	   });
+    
+  	  togglePasswordButton.addEventListener('mouseleave', function() {
+  	      passwordField.type = 'password';  // Hide password when cursor leaves the button
+	    });
+	}
 
     </script>
 </body>
