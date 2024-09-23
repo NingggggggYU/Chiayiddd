@@ -3,7 +3,7 @@ async function configureAuth0() {
     const auth0Client = await createAuth0Client({
         domain: "dev-5m5rsaavaelf0ss3.us.auth0.com",
         client_id: "ldVbBX9hxFRpLfvYbEfQSavq47lZI3lX",
-        redirect_uri: window.location.origin
+        redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
     });
 
     // 檢查使用者是否已經登入
