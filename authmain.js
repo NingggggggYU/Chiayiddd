@@ -5,11 +5,12 @@ async function configureAuth0() {
         redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
     });
 
+    // 檢查使用者是否已經登入
     const isAuthenticated = await auth0Client.isAuthenticated();
-    console.log("Is Authenticated:", isAuthenticated); // 添加調試輸出
+    console.log("Is Authenticated:", isAuthenticated);
 
     if (!isAuthenticated) {
-        console.log("Redirecting to login..."); // 添加調試輸出
+        console.log("Redirecting to login...");
         await auth0Client.loginWithRedirect({
             redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
         });
@@ -21,7 +22,16 @@ async function configureAuth0() {
         if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
             window.history.replaceState({}, document.title, window.location.pathname);
         }
+
+        // 確保網站在這裡顯示內容
+        displayUserContent(user);
     }
+}
+
+function displayUserContent(user) {
+    // 在這裡顯示登入後的內容
+    console.log("Welcome, ", user.name);
+    // 其他顯示邏輯
 }
 
 window.onload = async () => {
