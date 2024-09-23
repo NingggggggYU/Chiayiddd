@@ -13,7 +13,7 @@ async function configureAuth0() {
         if (!isAuthenticated) {
             console.log("User not authenticated, redirecting to login...");
             await auth0Client.loginWithRedirect({
-                redirect_uri: window.location.origin
+                redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
             });
         } else {
             // 獲取 Token
