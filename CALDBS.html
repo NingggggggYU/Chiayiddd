@@ -5,8 +5,6 @@
     <link rel="shortcut icon" sizes="16x16"  href="./caldbs.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="./appleicon.png" type="image/png">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
-    <script src="authmain.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中華航空系統登入驗證 / China Airlines System Login Verification</title>
@@ -48,32 +46,10 @@
   	   height: 24px;
 }
     </style>
-    <script type="text/javascript">
-        var warningString = "";
-        document.cookie = 'acceptsCookies=yes';
-        if(document.cookie == ''){
-          document.write(warningString);
-        }
-        else{
-          document.cookie = 'acceptsCookies=yes; expires=Fri, 13-Apr-1970 00:00:00 GMT';
-          // Uncomment the following line for JavaScript redirection
-          // document.cookie = 'ISAMOriginalURL=' + encodeURIComponent(window.location) + "; Path=/;";
-		  if(window.location.pathname != "https://iam.china-airlines.com/mga/sps/auth/pkmlogin.form"){
-            document.cookie = 'ISAMOriginalURL=' + encodeURIComponent(window.location) + "; Path=/;";
-          }
-        }
-     </script>
-     <noscript>
-        <div id="browser-notice" class="bg-warning text-center">
-        <b>警告：</b> 若要保留您的登入階段作業，請確定<br/>
-           您的瀏覽器已配置為接受 Cookie。
-        </div>
-     </noscript>
-	
-</head>
+    </head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 24.27</div>
+      <div class="version-text">Version : 24.28</div>
       <form class="login-container" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
         <!-- main-header Start-->
         <div id="main-header">
