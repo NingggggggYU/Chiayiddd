@@ -134,16 +134,7 @@
       </div>
 
     <script>
-         fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('ip-address').textContent = data.ip;
-        })
-        .catch(error => {
-            document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
-        });
-
-	const passwordField = document.getElementById('pass');
+        const passwordField = document.getElementById('pass');
 	const togglePasswordButton = document.getElementById('toggle-password');
 	const passwordIcon = document.getElementById('password-icon');
 
