@@ -1,12 +1,12 @@
-// Auth0 設置
-const auth0Client = await createAuth0Client({
-    domain: "dev-5m5rsaavaelf0ss3.us.auth0.com",
-    client_id: "ldVbBX9hxFRpLfvYbEfQSavq47lZI3lX",
-    redirect_uri: window.location.origin
-});
+async function configureAuth0() {
+    // Auth0 設置
+    const auth0Client = await createAuth0Client({
+        domain: "dev-5m5rsaavaelf0ss3.us.auth0.com",
+        client_id: "ldVbBX9hxFRpLfvYbEfQSavq47lZI3lX",
+        redirect_uri: window.location.origin
+    });
 
-// 檢查使用者是否已經登入
-async function checkAuthentication() {
+    // 檢查使用者是否已經登入
     const isAuthenticated = await auth0Client.isAuthenticated();
 
     if (!isAuthenticated) {
@@ -21,21 +21,7 @@ async function checkAuthentication() {
     }
 }
 
-// 在頁面載入時檢查身份驗證狀態
+// 在頁面載入時執行 Auth0 配置和身份驗證邏輯
 window.onload = async () => {
-    // 檢查是否是 Auth0 回調
-    if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/"); // 移除查詢參數
-    }
-
-    // 檢查使用者是否已經登入
-    await checkAuthentication();
+    await configureAuth0();
 };
-
-// 登出功能
-async function logout() {
-    await auth0Client.logout({
-        returnTo: window.location.origin
-    });
-}
