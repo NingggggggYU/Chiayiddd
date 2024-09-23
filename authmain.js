@@ -5,6 +5,13 @@ async function configureAuth0() {
         redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
     });
 
+    // 檢查是否有回調參數
+    if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
+        console.log("Processing login callback...");
+        await auth0Client.handleRedirectCallback();
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     try {
         // 檢查使用者是否已經登入
         const isAuthenticated = await auth0Client.isAuthenticated();
@@ -13,19 +20,13 @@ async function configureAuth0() {
         if (!isAuthenticated) {
             console.log("User not authenticated, redirecting to login...");
             await auth0Client.loginWithRedirect({
-                redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
+                redirect_uri: window.location.origin
             });
         } else {
             // 獲取 Token
             const token = await auth0Client.getTokenSilently();
             const user = await auth0Client.getUser();
             console.log("Logged in as:", user);
-
-            // 清理 URL 中的回調參數
-            if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
-                console.log("Cleaning up URL parameters...");
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
         }
     } catch (error) {
         console.error("Error during authentication check:", error);
