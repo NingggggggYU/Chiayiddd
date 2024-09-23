@@ -3,7 +3,7 @@ async function configureAuth0() {
     const auth0Client = await createAuth0Client({
         domain: "dev-5m5rsaavaelf0ss3.us.auth0.com",
         client_id: "ldVbBX9hxFRpLfvYbEfQSavq47lZI3lX",
-        redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"  // 統一使用這個 URL
+        redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
     });
 
     // 檢查使用者是否已經登入
@@ -12,12 +12,18 @@ async function configureAuth0() {
     if (!isAuthenticated) {
         // 使用者未登入，重定向到 Auth0 登入頁面
         await auth0Client.loginWithRedirect({
-            redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"  // 這裡要與 createAuth0Client 的 URL 一致
+            redirect_uri: "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"
         });
     } else {
-        // 使用者已登入，繼續顯示內容
+        // 使用者已登入，取得使用者資訊
         const user = await auth0Client.getUser();
         console.log("Logged in as:", user);
+
+        // 確保不再進行重定向
+        if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
+            // 如果 URL 中有登入後的查詢參數，清理它們，避免重複重定向
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     }
 }
 
