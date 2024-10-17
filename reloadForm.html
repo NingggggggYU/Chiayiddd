@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" sizes="16x16"  href="./caldbs.ico">
+    <link rel="shortcut icon" sizes="16x16"  href="./caldbs.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="./appleicon.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中華航空系統登入驗證 / China Airlines System Login Verification</title>
+    <style>
+        .version-text {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #808080;
+            font-weight: bold;
+	        z-index:1000;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="main">
+      <div class="version-text">Version : 24.30</div>
+      <form class="login-container" id="loginForm" name="reloadForm" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/choose.action">
+        <div id="main-header">
+          <div>
+            <img src="chinaairlinesicon.png" alt="China Airlines Logo">
+          </div>
+          <h1 id="page-title">簽派簡報系統</h1>
+          <p id="page-title-en">DISPATCH BRIEFING SYSTEM</p>
+          <div class="intro"></div>
+        </div>
+
+        <div id="main-content" class="login-inputs">
+          <div class="a-form-control">
+            <label class="form-label" for="username">場站 / Stations</label>
+            <input class="input-field " placeholder="" id="queryStation" type="text" name="queryStation" value="TPE">
+          </div>
+         <div class="a-form-control">
+            <label class="form-label" for="username">過去時間(-) / Query By ETD(-)</label>
+            <input class="input-field " placeholder="" id="bted" type="text" name="bted" value="8">
+          </div>
+          <div class="a-form-control">
+            <label class="form-label" for="username">未來時間(+) / Query By ETD(+)</label>
+            <input class="input-field " placeholder="" id="ated" type="text" name="ated" value="4">
+          </div>
+
+          <input type="hidden" name="login-form-type" value="pwd">
+          <input type="hidden" name="token" value="Unknown">
+
+          <div class="error-box" id="error-box">
+            <img style="float:left" src="error.png">
+            <div id="errId"></div>
+          </div>
+
+          <p class="a-form-control-exe">
+            <input id="btn-submitButton" class="btn btn-primary" type="submit" value="查詢 / Query">
+          </p>
+
+          <div class="sub-links">
+            <p class="text-center">
+              <a href="https://ningggggggyu.github.io/Chiayiddd/CALDBS.html">中華航空系統登入驗證 China Airlines System Login Verification</a>
+            </p>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+</body>
+</html>
