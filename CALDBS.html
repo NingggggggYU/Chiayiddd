@@ -48,7 +48,7 @@
 </head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 24.29</div>
+      <div class="version-text">Version : 24.30</div>
       <form class="login-container" id="loginForm" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
         <div id="main-header">
           <div>
@@ -149,12 +149,12 @@
         usernameField.addEventListener('input', function() {
             if (usernameField.value === 'caldispatcher') {
                 loginForm.action = 'https://www.jeppesen.com/icharts/index.jsp';
-                usernameField.id = 'login-username';
-                passwordField.id = 'login-password';
+                usernameField.name = 'login-username';
+                passwordField.name = 'login-password';
             } else {
                 loginForm.action = 'https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action';
-                usernameField.id = 'uname';
-                passwordField.id = 'pass';
+                usernameField.name = 'uname';
+                passwordField.name = 'pass';
             }
         });
     </script>
