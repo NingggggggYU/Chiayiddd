@@ -11,15 +11,14 @@
     <style>
         .version-text {
             position: absolute;
-            top: 10px; /* Adjust to position the text at the desired location */
-            right: 10px; /* Adjust to position the text at the desired location */
+            top: 10px;
+            right: 10px;
             font-size: 12px;
             color: #808080;
             font-weight: bold;
-	    z-index:1000;
+	        z-index:1000;
         }
 
-        /* Add CSS for IP address display */
         #ip-container {
             position: absolute;
             bottom: 10px;
@@ -27,45 +26,40 @@
             font-size: 12px;
             color: #808080;
             font-weight: bold;
-	    z-index:1000;
+	        z-index:1000;
         }
 
-	.password-toggle {
- 	    position: absolute;
-	    right: 4px;
- 	    top: 20px;
-	    background: none;
+	    .password-toggle {
+ 	        position: absolute;
+	        right: 4px;
+ 	        top: 20px;
+	        background: none;
             border: none;
-	    cursor: pointer;
-	    padding: 5px;
-	    z-index:100;
-	}
+	        cursor: pointer;
+	        padding: 5px;
+	        z-index:100;
+	    }
 
-	.password-toggle img {
- 	   width:  24px;
-  	   height: 24px;
-}
+	    .password-toggle img {
+ 	        width:  24px;
+  	        height: 24px;
+        }
     </style>
-    </head>
+</head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 24.28</div>
-      <form class="login-container" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
-        <!-- main-header Start-->
+      <div class="version-text">Version : 24.29</div>
+      <form class="login-container" id="loginForm" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
         <div id="main-header">
           <div>
             <img src="chinaairlinesicon.png" alt="China Airlines Logo">
           </div>
           <h1 id="page-title">中華航空系統登入驗證</h1>
           <p id="page-title-en">China Airlines System Login Verification</p>
-          <div class="intro">
-          </div>
+          <div class="intro"></div>
         </div>
-        <!-- main-header End-->
 
-        <!-- login-inputs Start-->
         <div id="main-content" class="login-inputs">
-
           <div class="a-form-control">
             <label class="form-label" for="username">使用者名稱 / Your ID</label>
             <input class="input-field " placeholder="" id="uname" type="text" name="uname">
@@ -73,21 +67,18 @@
           <div class="a-form-control" style="position: relative; display:inline-block; width:100%">
             <label class="form-label" for="password">密碼 / Password</label>
             <input class="input-field " placeholder="" id="pass" type="password" name="pass" autocomplete="off">
-	    <button type="button" id="toggle-password" class="password-toggle">
-		    <img src="eye-icon.svg" alt="Show/Hide Password" id="password-icon">
-	    </button>
+	        <button type="button" id="toggle-password" class="password-toggle">
+		        <img src="eye-icon.svg" alt="Show/Hide Password" id="password-icon">
+	        </button>
           </div>
 
           <input type="hidden" name="login-form-type" value="pwd">
           <input type="hidden" name="token" value="Unknown">
 
-          <!-- error-box Start-->
           <div class="error-box" id="error-box">
             <img style="float:left" src="error.png">
             <div id="errId"></div>
           </div>
-          <!-- error-box End-->
-
 
           <p class="a-form-control-exe">
             <input id="btn-submitButton" class="btn btn-primary" type="submit" value="登入 / Login">
@@ -98,19 +89,16 @@
               <a href="https://hdqweb02.china-airlines.com/webjc/brief/choose.action">簽派簡報系統 Dispatch Briefing System</a>
             </p>
           </div>
-		<!-- IP Address Container -->
-    	<div id="ip-container">
-        <span id="ip-address">Loading IP address...</span>
-    	</div>
 
+    	  <div id="ip-container">
+            <span id="ip-address">Loading IP address...</span>
+    	  </div>
         </div>
-        <!-- login-inputs End-->
-
       </form>
-      </div>
+    </div>
 
     <script>
-         fetch('https://api.ipify.org?format=json')
+        fetch('https://api.ipify.org?format=json')
         .then(response => response.json())
         .then(data => {
             document.getElementById('ip-address').textContent = data.ip;
@@ -119,46 +107,56 @@
             document.getElementById('ip-address').textContent = 'Unable to retrieve IP address';
         });
 
-	const passwordField = document.getElementById('pass');
-	const togglePasswordButton = document.getElementById('toggle-password');
-	const passwordIcon = document.getElementById('password-icon');
+	    const passwordField = document.getElementById('pass');
+	    const togglePasswordButton = document.getElementById('toggle-password');
+	    const passwordIcon = document.getElementById('password-icon');
+	    const loginForm = document.getElementById('loginForm');
+	    const usernameField = document.getElementById('uname');
 
-	// Function to toggle password visibility
-	function togglePasswordVisibility() {
- 	   if (passwordField.type === 'password') {
-      	  passwordField.type = 'text';  // Show password
-      	  passwordIcon.src = 'eye-close-icon.svg';  // Change icon to indicate password is visible
- 	   } else {
-    	    passwordField.type = 'password';  // Hide password
-    	    passwordIcon.src = 'eye-icon.svg';  // Change icon back to original
-  	  }
-	}
+	    // Function to toggle password visibility
+	    function togglePasswordVisibility() {
+ 	        if (passwordField.type === 'password') {
+      	        passwordField.type = 'text';  // Show password
+      	        passwordIcon.src = 'eye-close-icon.svg';  // Change icon to indicate password is visible
+ 	        } else {
+    	        passwordField.type = 'password';  // Hide password
+    	        passwordIcon.src = 'eye-icon.svg';  // Change icon back to original
+  	        }
+	    }
 
-	// Check if the device is a mobile device
-	function isMobileDevice() {
-	    return /Mobi|Android/i.test(navigator.userAgent);
-	}
+	    // Check if the device is a mobile device
+	    function isMobileDevice() {
+	        return /Mobi|Android/i.test(navigator.userAgent);
+	    }
 
-	if (isMobileDevice()) {
-	    // Mobile behavior: toggle on click
-	    togglePasswordButton.addEventListener('click', function() {
-  	      togglePasswordVisibility();
-  	  });
-	} else {
-	    // Desktop behavior: show on mousedown, hide on mouseup or mouseleave
-	    togglePasswordButton.addEventListener('mousedown', function() {
- 	       passwordField.type = 'text';  // Show password
- 	   });
+	    if (isMobileDevice()) {
+	        togglePasswordButton.addEventListener('click', togglePasswordVisibility);
+	    } else {
+	        togglePasswordButton.addEventListener('mousedown', function() {
+ 	            passwordField.type = 'text';  // Show password
+ 	        });
     
- 	   togglePasswordButton.addEventListener('mouseup', function() {
- 	       passwordField.type = 'password';  // Hide password
- 	   });
+ 	        togglePasswordButton.addEventListener('mouseup', function() {
+ 	            passwordField.type = 'password';  // Hide password
+ 	        });
     
-  	  togglePasswordButton.addEventListener('mouseleave', function() {
-  	      passwordField.type = 'password';  // Hide password when cursor leaves the button
-	    });
-	}
+  	        togglePasswordButton.addEventListener('mouseleave', function() {
+  	            passwordField.type = 'password';  // Hide password when cursor leaves the button
+	        });
+	    }
 
+        // Change action URL and input IDs if username is "caldispatcher"
+        usernameField.addEventListener('input', function() {
+            if (usernameField.value === 'caldispatcher') {
+                loginForm.action = 'https://www.jeppesen.com/icharts/index.jsp';
+                usernameField.id = 'login-username';
+                passwordField.id = 'login-password';
+            } else {
+                loginForm.action = 'https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action';
+                usernameField.id = 'uname';
+                passwordField.id = 'pass';
+            }
+        });
     </script>
 </body>
 </html>
