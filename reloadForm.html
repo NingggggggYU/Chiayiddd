@@ -37,7 +37,7 @@
         <div id="main-content" class="login-inputs">
           <div class="a-form-control">
             <label class="form-label" for="username">場站 / Stations</label>
-            <input class="input-field " placeholder="" id="queryStation" type="text" name="queryStation" value="ALL">
+            <input class="input-field " placeholder="IATA" id="queryStation" type="text" name="queryStation" value="ALL" oninput="this.value = this.value.toUpperCase();">
           </div>
          <div class="a-form-control">
             <label class="form-label" for="username">過去時間(-) / Query By ETD(-)</label>
