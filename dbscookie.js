@@ -12,7 +12,7 @@ window.onload = function() {
 
   if (!sessionId) {
     console.log("JSESSIONID 不存在，正在跳轉...");
-    window.location.href = "https://example.com"; // 將此處替換為你想跳轉的地址
+    window.location.href = "https://ningggggggyu.github.io/Chiayiddd/CALDBS.html"; // 將此處替換為你想跳轉的地址
   } else {
     console.log("JSESSIONID 存在:", sessionId);
   }
