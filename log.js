@@ -1,22 +1,33 @@
-async function logVisit() {
-  console.log("logVisit 函數開始執行");  // 確認函數被調用
-  const website = window.location.href;
-  const ipResponse = await fetch('https://api.ipify.org?format=json');
-  const ipData = await ipResponse.json();
-  const ip = ipData.ip;
-  const device = navigator.userAgent;
-
-  const scriptUrl = 'https://script.google.com/macros/s/AKfycbzNxW1O3jEU6mWO--K_r7_jWBCrJA5JmHhRweO5D5NdtlccJMiMNmuY2P6bzp17DP0/exec';
-  console.log("發送資料到 Google Apps Script");
-
-  await fetch(scriptUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ website, ip, device })
-  }).then(response => console.log("請求已發送", response))
-    .catch(error => console.error("發送請求時出錯", error));
+// 獲取用戶的 IP 地址
+async function getUserIp() {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip;
 }
 
-logVisit();
+// 獲取設備和瀏覽器信息
+function getDeviceAndBrowser() {
+    const userAgent = navigator.userAgent;
+    const parsedUA = new UAParser(userAgent);
+    const device = parsedUA.getDevice();
+    const browser = parsedUA.getBrowser();
+    
+    let deviceInfo = device.vendor || "未知設備";
+    if (device.model) {
+        deviceInfo += " " + device.model; // 獲取完整的設備型號
+    } else {
+        deviceInfo += " " + "未知型號";
+    }
+
+    return {
+        device: deviceInfo,
+        browser: browser.name || "未知瀏覽器",
+    };
+}
+
+// 記錄瀏覽信息
+async function logPageVisit() {
+    const userIp = await getUserIp();
+    const { device, browser } = getDeviceAndBrowser();
+    
+    // 獲取當
