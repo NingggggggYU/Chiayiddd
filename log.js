@@ -36,7 +36,7 @@ async function logPageVisit() {
     // 獲取當前頁面的 URL
     const currentUrl = window.location.href;
 
-    await fetch('https://ningggggggyu.github.io/Chiayiddd/index.js', { // 使用 GitHub Pages 的 API 網址
+    await fetch('https://chiayiddd.vercel.app/index.js', { // 使用 Vercel 的 API 網址
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
