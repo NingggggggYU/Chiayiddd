@@ -30,4 +30,20 @@ async function logPageVisit() {
     const userIp = await getUserIp();
     const { device, browser } = getDeviceAndBrowser();
     
-    // 獲取當
+    // 獲取當前時間並轉換為台灣時間
+    const visitTime = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+
+    // 獲取當前頁面的 URL
+    const currentUrl = window.location.href;
+
+    await fetch('https://ningggggggyu.github.io/Chiayiddd/index.js', { // 使用 GitHub Pages 的 API 網址
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userIp, device, visitTime, browser, currentUrl }), // 包含當前網址
+    });
+}
+
+// 监听页面加載
+window.addEventListener('load', logPageVisit);
