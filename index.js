@@ -5,7 +5,10 @@ const { google } = require('googleapis'); // 引入 Google APIs
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+    origin: '*', // 允許所有來源，這裡可以根據需要調整
+}));
+
 app.use(bodyParser.json());
 
 // 設定 Google Sheets API
