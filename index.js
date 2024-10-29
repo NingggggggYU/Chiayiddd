@@ -5,13 +5,13 @@ const { google } = require('googleapis');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// 啟用 CORS，允許跨來源請求
+// 啟用 CORS
 app.use(cors());
 app.use(bodyParser.json());
 
 // Google Sheets API 設定
 const auth = new google.auth.GoogleAuth({
-    keyFile: 'service-account.json',  // 請確保此路徑正確，指向您的 JSON 憑證文件
+    keyFile: 'omega-castle-426910-k7-f1eb46411709.json',  // 請確認此為正確的憑證路徑
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
@@ -24,10 +24,10 @@ app.post('/log', async (req, res) => {
     try {
         const client = await auth.getClient();
         const sheets = google.sheets({ version: 'v4', auth: client });
-        
+
         const request = {
             spreadsheetId: SPREADSHEET_ID,
-            range: 'Sheet1!A:E',  // 指定要寫入的範圍
+            range: 'Sheet1!A:E',
             valueInputOption: 'RAW',
             resource: {
                 values: [[userIp, device, visitTime, browser, currentUrl]],
