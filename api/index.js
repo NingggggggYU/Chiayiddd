@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 // Google Sheets API 設定
 const auth = new google.auth.GoogleAuth({
-    keyFile: 'omega-castle-426910-k7-f1eb46411709.json',  // 請確認此為正確的憑證路徑
+    keyFile: 'omega-castle-426910-k7-f1eb46411709.json',  // 確保此為正確的憑證路徑
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
