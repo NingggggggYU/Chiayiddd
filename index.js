@@ -1,23 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { google } = require('googleapis'); // 引入 Google APIs
+const { google } = require('googleapis');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({
-    origin: '*', // 允許所有來源，這裡可以根據需要調整
-}));
-
+// 啟用 CORS，允許跨來源請求
+app.use(cors());
 app.use(bodyParser.json());
 
-// 設定 Google Sheets API
+// Google Sheets API 設定
 const auth = new google.auth.GoogleAuth({
-    keyFile: 'omega-castle-426910-k7-f1eb46411709.json', // 將此處替換為您的 JSON 憑證文件路徑
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'], // 設置所需的授權範圍
+    keyFile: 'service-account.json',  // 請確保此路徑正確，指向您的 JSON 憑證文件
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-// 設定您的 Google Sheets ID
+// Google Sheets 的 ID
 const SPREADSHEET_ID = '1RLou3yyu0-X1GAmCVen1d2_x54vth3TfabYhmXUCssE';
 
 app.post('/log', async (req, res) => {
@@ -25,20 +23,21 @@ app.post('/log', async (req, res) => {
 
     try {
         const client = await auth.getClient();
+        const sheets = google.sheets({ version: 'v4', auth: client });
+        
         const request = {
-            spreadsheetId: '1RLou3yyu0-X1GAmCVen1d2_x54vth3TfabYhmXUCssE',
-            range: 'Sheet1!A1:E1', // 指定要寫入的範圍
+            spreadsheetId: SPREADSHEET_ID,
+            range: 'Sheet1!A:E',  // 指定要寫入的範圍
             valueInputOption: 'RAW',
             resource: {
-                values: [[userIp, device, visitTime, browser, currentUrl]], // 將資料寫入表格
+                values: [[userIp, device, visitTime, browser, currentUrl]],
             },
-            auth: client,
         };
 
-        await google.sheets('v4').spreadsheets.values.append(request);
+        await sheets.spreadsheets.values.append(request);
         res.status(200).send('Data logged to Google Sheets');
     } catch (error) {
-        console.error(error);
+        console.error('Error logging data:', error);
         res.status(500).send('Error logging data');
     }
 });
