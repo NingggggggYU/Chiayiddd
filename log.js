@@ -26,7 +26,7 @@ async function logPageVisit() {
     const visitTime = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
     const currentUrl = window.location.href;
 
-    fetch('https://chiayiddd.vercel.app/log', {  // 更新為您的 Vercel API URL
+    fetch('https://chiayiddd.vercel.app/api/log', {  // 更新為您的 Vercel API URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
