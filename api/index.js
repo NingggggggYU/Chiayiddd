@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { google } = require('googleapis');
 const app = express();
-const port = process.env.PORT || 3000;
 
 // 啟用 CORS
 app.use(cors());
@@ -18,6 +17,7 @@ const auth = new google.auth.GoogleAuth({
 // Google Sheets 的 ID
 const SPREADSHEET_ID = '1RLou3yyu0-X1GAmCVen1d2_x54vth3TfabYhmXUCssE';
 
+// POST 請求的路由
 app.post('/log', async (req, res) => {
     const { userIp, device, visitTime, browser, currentUrl } = req.body;
 
@@ -42,6 +42,7 @@ app.post('/log', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+// 不需要這行，因為 Vercel 自動處理
+// app.listen(port, () => {
+//     console.log(`Server running at http://localhost:${port}`);
+// });
