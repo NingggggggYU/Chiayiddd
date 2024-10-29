@@ -18,7 +18,7 @@ const auth = new google.auth.GoogleAuth({
 });
 
 // 設定您的 Google Sheets ID
-const SPREADSHEET_ID = '您的 Google Sheets ID';
+const SPREADSHEET_ID = '1RLou3yyu0-X1GAmCVen1d2_x54vth3TfabYhmXUCssE';
 
 app.post('/log', async (req, res) => {
     const { userIp, device, visitTime, browser, currentUrl } = req.body;
