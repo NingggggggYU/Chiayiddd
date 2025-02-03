@@ -1,15 +1,50 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <link rel="icon" sizes="16x16"  href="caldbs.ico">
-    <link rel="shortcut icon" sizes="16x16"  href="caldbs.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5; url=https://www.china-airlines.com/tw/zh">
+    <title>重新定向中...</title>
+    <link rel="icon" sizes="16x16" href="caldbs.ico">
+    <link rel="shortcut icon" sizes="16x16" href="caldbs.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="appleicon.png" type="image/png">
     <link rel="stylesheet" href="styles.css">
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://www.china-airlines.com/tw/zh">
-    <title>重新定向中...</title>
+    <style>
+        /* 設置全頁面置中 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 旋轉動畫效果 */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ddd;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 文字樣式 */
+        #page-title {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
+    <div class="spinner"></div>
     <p id="page-title">頁面正在跳轉到 <a href="https://www.china-airlines.com/tw/zh">China Airlines 中華航空</a>...</p>
 </body>
 </html>
