@@ -48,7 +48,7 @@
 </head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 24.32</div>
+      <div class="version-text">Version : 25.01</div>
       <form class="login-container" id="loginForm" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action">
         <div id="main-header">
           <div>
@@ -139,18 +139,6 @@
 	        });
 	    }
 
-        // Change action URL and input IDs if username is "caldispatcher"
-        usernameField.addEventListener('input', function() {
-            if (usernameField.value === 'caldispatcher') {
-                loginForm.action = 'https://www.jeppesen.com/icharts/index.jsp';
-                usernameField.name = 'login-username';
-                passwordField.name = 'login-password';
-            } else {
-                loginForm.action = 'https://hdqweb02.china-airlines.com/webjc/brief/dbsLogin.action';
-                usernameField.name = 'uname';
-                passwordField.name = 'pass';
-            }
-        });
     </script>
 </body>
 </html>
