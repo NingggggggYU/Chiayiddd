@@ -94,6 +94,15 @@
             font-family: monospace;
         }
 
+        .flight-info pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
         .no-results {
             text-align: center;
             font-size: 16px;
@@ -137,7 +146,7 @@
 <body>
     <div class="container">
         <div class="search-container">
-            <h1>Flight Info</h1>
+            <h1>General Schedule Internation</h1>
             <form id="flightForm">
                 <label for="airlineId">Airline ID:</label>
                 <input type="text" id="airlineId" name="airlineId" placeholder="IATA 兩碼代碼" oninput="this.value = this.value.toUpperCase();">
@@ -243,6 +252,22 @@
             event.preventDefault();
             fetchFlightData();
         });
+
+        function displayFlightData(flights) {
+            const flightInfoContainer = document.getElementById('flightInfoContainer');
+            flightInfoContainer.innerHTML = '';
+
+            if (flights.length > 0) {
+                flights.forEach(flight => {
+                    const flightInfoDiv = document.createElement('div');
+                    flightInfoDiv.className = 'flight-info';
+                    flightInfoDiv.innerHTML = `<pre>${JSON.stringify(flight, null, 2)}</pre>`;
+                    flightInfoContainer.appendChild(flightInfoDiv);
+                });
+            } else {
+                flightInfoContainer.innerHTML = '<div class="no-results">No flight information available.</div>';
+            }
+        }
     </script>
 </body>
 </html>
