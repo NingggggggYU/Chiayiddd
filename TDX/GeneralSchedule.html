@@ -219,7 +219,26 @@
                             data.forEach(flight => {
                                 const flightInfoDiv = document.createElement('div');
                                 flightInfoDiv.className = 'flight-info';
-                                flightInfoDiv.textContent = JSON.stringify(flight, null, 2);
+                                flightInfoDiv.innerHTML = `
+                                    <p><strong>AirlineID:</strong> ${flight.AirlineID}</p>
+                                    <p><strong>ScheduleStartDate:</strong> ${flight.ScheduleStartDate}</p>
+                                    <p><strong>ScheduleEndDate:</strong> ${flight.ScheduleEndDate}</p>
+                                    <p><strong>FlightNumber:</strong> ${flight.FlightNumber}</p>
+                                    <p><strong>DepartureAirportID:</strong> ${flight.DepartureAirportID}</p>
+                                    <p><strong>ArrivalAirportID:</strong> ${flight.ArrivalAirportID}</p>
+                                    <p><strong>DepartureTime:</strong> ${flight.DepartureTime}</p>
+                                    <p><strong>ArrivalTime:</strong> ${flight.ArrivalTime}</p>
+                                    <p><strong>Terminal:</strong> ${flight.Terminal}</p>
+                                    <p><strong>Monday:</strong> ${flight.Monday}</p>
+                                    <p><strong>Tuesday:</strong> ${flight.Tuesday}</p>
+                                    <p><strong>Wednesday:</strong> ${flight.Wednesday}</p>
+                                    <p><strong>Thursday:</strong> ${flight.Thursday}</p>
+                                    <p><strong>Friday:</strong> ${flight.Friday}</p>
+                                    <p><strong>Saturday:</strong> ${flight.Saturday}</p>
+                                    <p><strong>Sunday:</strong> ${flight.Sunday}</p>
+                                    <p><strong>UpdateTime:</strong> ${flight.UpdateTime}</p>
+                                    `}
+                                `;
                                 flightInfoContainer.appendChild(flightInfoDiv);
                             });
                         } else {
