@@ -210,31 +210,46 @@
                             "authorization": "Bearer " + accesstoken
                         }
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        const flightInfoContainer = document.getElementById('flightInfoContainer');
-                        flightInfoContainer.innerHTML = '';
 
-                        if (data.length > 0) {
-                            data.forEach(flight => {
-                                const flightInfoDiv = document.createElement('div');
-                                flightInfoDiv.className = 'flight-info';
-                                flightInfoDiv.textContent = JSON.stringify(flight, null, 2);
-                                flightInfoContainer.appendChild(flightInfoDiv);
-                            });
-                        } else {
-                            flightInfoContainer.innerHTML = '<div class="no-results">No flight information available.</div>';
-                        }
+        function formatFlightData(flight) {
+    return `
+        <div class="flight-info">
+            <h3>${flight.AirlineID} ${flight.FlightNumber}</h3>
+            <p><strong>起飛機場:</strong> ${flight.DepartureAirportID} (${flight.DepartureTime})</p>
+            <p><strong>抵達機場:</strong> ${flight.ArrivalAirportID} (${flight.ArrivalTime})</p>
+            <p><strong>適用日期區間:</strong> ${flight.ScheduleStartDate} ~ ${flight.ScheduleEndDate}</p>
+            <p><strong>最後更新時間:</strong> ${new Date(flight.UpdateTime).toLocaleString()}</p>
+            ${generateWeekScheduleTable(flight)}
+        </div>
+    `;
+}
 
-                        updateLastUpdatedTime();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching flight data:', error);
-                    });
-                }
-            });
-        }
+function generateWeekScheduleTable(flight) {
+    const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const shortDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    let scheduleRow = shortDays.map((day, index) => flight[weekDays[index]] ? '<td class="active">O</td>' : '<td>X</td>').join('');
 
+    return `
+        <table class="schedule-table">
+            <tr>${shortDays.map(day => `<th>${day}</th>`).join('')}</tr>
+            <tr>${scheduleRow}</tr>
+        </table>
+    `;
+}
+
+function displayFlightResults(data) {
+    const flightInfoContainer = document.getElementById('flightInfoContainer');
+    flightInfoContainer.innerHTML = '';
+
+    if (data.length > 0) {
+        data.forEach(flight => {
+            flightInfoContainer.innerHTML += formatFlightData(flight);
+        });
+    } else {
+        flightInfoContainer.innerHTML = '<div class="no-results">No flight information available.</div>';
+    }
+}
+        
         function updateLastUpdatedTime() {
             document.getElementById('lastUpdated').innerText = 'Last updated: ' + new Date().toLocaleTimeString();
         }
