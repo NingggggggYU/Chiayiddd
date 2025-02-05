@@ -51,7 +51,7 @@
             color: #555;
         }
 
-        input[type="text"], input[type="date"], input[type="number"] {
+        input {
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
@@ -90,7 +90,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             color: #333;
-            white-space: pre-wrap; /* 顯示 JSON 格式 */
+            white-space: pre-wrap;
             font-family: monospace;
         }
 
@@ -146,7 +146,7 @@
                 <input type="date" id="scheduleStartDate" name="scheduleStartDate">
 
                 <label for="flightNumber">Flight Number:</label>
-                <input type="text" id="flightNumber">
+                <input type="text" id="flightNumber" name="flightNumber" placeholder="航班號碼 (英數字)">
 
                 <button type="submit">Query</button>
             </form>
@@ -181,19 +181,29 @@
         }
 
         function fetchFlightData() {
-            const airlineId = document.getElementById('airlineId').value;
-            const scheduleStartDate = document.getElementById('scheduleStartDate').value;
-            const flightNumber = document.getElementById('flightNumber').value;
+            const airlineId = document.getElementById('airlineId').value.trim();
+            const scheduleStartDate = document.getElementById('scheduleStartDate').value.trim();
+            const flightNumber = document.getElementById('flightNumber').value.trim();
+
+            if (!airlineId && !scheduleStartDate && !flightNumber) {
+                alert('請至少輸入一個搜尋條件！');
+                return;
+            }
 
             getAccessToken().then(accesstoken => {
                 if (accesstoken) {
-                    const query = new URLSearchParams({
-                        '$top': 10,
+                    let filters = [];
+
+                    if (airlineId) filters.push(`AirlineID eq '${airlineId}'`);
+                    if (scheduleStartDate) filters.push(`ScheduleStartDate eq '${scheduleStartDate}'`);
+                    if (flightNumber) filters.push(`FlightNumber eq '${flightNumber}'`);
+
+                    const queryParams = new URLSearchParams({
                         '$format': 'JSON',
-                        '$filter': `AirlineID eq '${airlineId}' and FlightNumber eq '${flightNumber}' and ScheduleStartDate eq '${scheduleStartDate}'`
+                        '$filter': filters.join(' and ')
                     }).toString();
 
-                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International?${query}`;
+                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International?${queryParams}`;
 
                     fetch(url, {
                         headers: {
@@ -203,7 +213,7 @@
                     .then(response => response.json())
                     .then(data => {
                         const flightInfoContainer = document.getElementById('flightInfoContainer');
-                        flightInfoContainer.innerHTML = ''; // 清除之前結果
+                        flightInfoContainer.innerHTML = '';
 
                         if (data.length > 0) {
                             data.forEach(flight => {
