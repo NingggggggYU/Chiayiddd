@@ -158,91 +158,75 @@
     <div id="lastUpdated" class="last-updated"></div>
 
     <script>
-        function getAccessToken() {
-            const parameter = {
-                grant_type: "client_credentials",
-                client_id: "yuche0826-7e3f053e-05b0-4345",
-                client_secret: "4541eb2b-6bbd-4a5b-a025-2335227d4c96"
-            };
+    function formatFlightData(flight) {
+        // 格式化航班資訊
+        const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const schedule = weekdays.map(day => flight[day] ? 'O' : 'X').join(' ');
+        
+        return `
+            <div class="flight-info">
+                <h2>航班資訊</h2>
+                <p><strong>航空公司：</strong> ${flight.AirlineID}</p>
+                <p><strong>航班號碼：</strong> ${flight.FlightNumber}</p>
+                <p><strong>起飛機場：</strong> ${flight.DepartureAirportID} (${flight.DepartureTime})</p>
+                <p><strong>抵達機場：</strong> ${flight.ArrivalAirportID} (${flight.ArrivalTime})</p>
+                <p><strong>航廈：</strong> ${flight.Terminal || 'N/A'}</p>
+                <p><strong>適用日期：</strong> ${flight.ScheduleStartDate} ~ ${flight.ScheduleEndDate}</p>
+                <p><strong>班表：</strong> S M T W T F S</p>
+                <p style="font-weight:bold; font-size: 18px;">${schedule}</p>
+                <p><strong>最後更新時間：</strong> ${new Date(flight.UpdateTime).toLocaleString()}</p>
+            </div>
+        `;
+    }
 
-            return fetch("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token", {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: new URLSearchParams(parameter)
-            })
-            .then(response => response.json())
-            .then(data => data.access_token)
-            .catch(error => {
-                console.error('Error fetching access token:', error);
-                return null;
-            });
+    function fetchFlightData() {
+        const airlineId = document.getElementById('airlineId').value.trim();
+        const scheduleStartDate = document.getElementById('scheduleStartDate').value.trim();
+        const flightNumber = document.getElementById('flightNumber').value.trim();
+
+        if (!airlineId && !scheduleStartDate && !flightNumber) {
+            alert('請至少輸入一個搜尋條件！');
+            return;
         }
 
-        function fetchFlightData() {
-            const airlineId = document.getElementById('airlineId').value.trim();
-            const scheduleStartDate = document.getElementById('scheduleStartDate').value.trim();
-            const flightNumber = document.getElementById('flightNumber').value.trim();
+        getAccessToken().then(accesstoken => {
+            if (accesstoken) {
+                let filters = [];
+                if (airlineId) filters.push(`AirlineID eq '${airlineId}'`);
+                if (scheduleStartDate) filters.push(`ScheduleStartDate eq '${scheduleStartDate}'`);
+                if (flightNumber) filters.push(`FlightNumber eq '${flightNumber}'`);
 
-            if (!airlineId && !scheduleStartDate && !flightNumber) {
-                alert('請至少輸入一個搜尋條件！');
-                return;
+                const queryParams = new URLSearchParams({
+                    '$format': 'JSON',
+                    '$filter': filters.join(' and ')
+                }).toString();
+
+                const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International?${queryParams}`;
+
+                fetch(url, {
+                    headers: { "authorization": "Bearer " + accesstoken }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const flightInfoContainer = document.getElementById('flightInfoContainer');
+                    flightInfoContainer.innerHTML = '';
+
+                    if (data.length > 0) {
+                        data.forEach(flight => {
+                            flightInfoContainer.innerHTML += formatFlightData(flight);
+                        });
+                    } else {
+                        flightInfoContainer.innerHTML = '<div class="no-results">No flight information available.</div>';
+                    }
+
+                    updateLastUpdatedTime();
+                })
+                .catch(error => {
+                    console.error('Error fetching flight data:', error);
+                });
             }
-
-            getAccessToken().then(accesstoken => {
-                if (accesstoken) {
-                    let filters = [];
-
-                    if (airlineId) filters.push(`AirlineID eq '${airlineId}'`);
-                    if (scheduleStartDate) filters.push(`ScheduleStartDate eq '${scheduleStartDate}'`);
-                    if (flightNumber) filters.push(`FlightNumber eq '${flightNumber}'`);
-
-                    const queryParams = new URLSearchParams({
-                        '$format': 'JSON',
-                        '$filter': filters.join(' and ')
-                    }).toString();
-
-                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International?${queryParams}`;
-
-                    fetch(url, {
-                        headers: {
-                            "authorization": "Bearer " + accesstoken
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        const flightInfoContainer = document.getElementById('flightInfoContainer');
-                        flightInfoContainer.innerHTML = '';
-
-                        if (data.length > 0) {
-                            data.forEach(flight => {
-                                const flightInfoDiv = document.createElement('div');
-                                flightInfoDiv.className = 'flight-info';
-                                flightInfoDiv.textContent = JSON.stringify(flight, null, 2);
-                                flightInfoContainer.appendChild(flightInfoDiv);
-                            });
-                        } else {
-                            flightInfoContainer.innerHTML = '<div class="no-results">No flight information available.</div>';
-                        }
-
-                        updateLastUpdatedTime();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching flight data:', error);
-                    });
-                }
-            });
-        }
-
-        function updateLastUpdatedTime() {
-            document.getElementById('lastUpdated').innerText = 'Last updated: ' + new Date().toLocaleTimeString();
-        }
-
-        document.getElementById('flightForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            fetchFlightData();
         });
-    </script>
+    }
+</script>
 </body>
 </html>
