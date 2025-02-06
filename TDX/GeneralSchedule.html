@@ -90,16 +90,25 @@
             }
             .search-container {
                 width: 100%;
-                overflow-y: hidden; /* 避免搜尋欄內部滾動 */
-                position: sticky; /* 讓它固定在頁面頂部 */
+                position: sticky; /* 固定在頁面頂端 */
                 top: 0;
-                background-color: white; /* 確保不會透明 */
-                z-index: 10; /* 避免被內容遮住 */
+                background-color: white;
+                z-index: 10;
+                padding: 20px;
+                transition: padding 0.3s ease-in-out, min-height 0.3s ease-in-out;
+                min-height: 150px; /* 設定搜尋欄的初始高度 */
             }
             .results-container {
                 width: 100%;
                 flex-grow: 1; /* 讓結果區塊撐滿剩餘空間 */
                 overflow-y: auto; /* 允許滾動 */
+            }
+             /* 當使用者開始滾動時，讓搜尋欄縮小 */
+        @supports (-webkit-touch-callout: none) { /* 針對行動裝置適配 */
+            .search-container:has(+ .results-container:focus-within) {
+                min-height: 60px; /* 縮小搜尋欄 */
+                padding: 10px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             }
         }
     </style>
