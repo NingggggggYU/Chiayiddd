@@ -42,6 +42,7 @@
             padding: 5px 10px;
             border-radius: 4px;
         }
+        
         label {
             font-weight: bold;
             color: #333;
@@ -64,14 +65,9 @@
             font-size: 16px;
             cursor: pointer;
             width: 100%;
-            transition: background 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
-        }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
         }
         .result {
             background-color: #fff;
@@ -80,9 +76,11 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
         }
+
         .result p strong {
             color: #007bff;
         }
+        
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -100,91 +98,115 @@
             <p id="page-title-en">General Schedule International</p>
             <form id="searchForm">
                 <label class="form-label">航班編號 / Flight Number:</label>
-                <input type="text" id="flightNumber" name="flightNumber" pattern="[A-Za-z0-9]*" oninput="this.value = this.value.toUpperCase(); checkInput();">
+                <input type="text" id="flightNumber" name="flightNumber" pattern="[A-Za-z0-9]*" oninput="this.value = this.value.toUpperCase();">
 
                 <label class="form-label">出發機場 / Departure Airport :</label>
-                <input type="text" id="departureAirportID" name="departureAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase(); checkInput();">
+                <input type="text" id="departureAirportID" name="departureAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
                 <label class="form-label">抵達機場 / Arrival Airport :</label>
-                <input type="text" id="arrivalAirportID" name="arrivalAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase(); checkInput();">
+                <input type="text" id="arrivalAirportID" name="arrivalAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
                 <p id="error-message" class="error-message">請至少輸入一項查詢條件！</p>
                 
-                <button id="searchButton" class="btn btn-primary" type="submit" disabled>查詢 / Query</button>
+                <button id="searchButton" type="submit">查詢 / Query</button>
             </form>
         </div>
         <div id="results" class="results-container"></div>
     </div>
 
     <script>
+        async function getAccessToken() {
+            const parameter = {
+                grant_type: "client_credentials",
+                client_id: "yuche0826-7e3f053e-05b0-4345",
+                client_secret: "4541eb2b-6bbd-4a5b-a025-2335227d4c96"
+            };
+
+            try {
+                const response = await fetch("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token", {
+                    method: 'POST',
+                    headers: {
+                        "Accept-Encoding": "br,gzip",
+                    },
+                    body: new URLSearchParams(parameter)
+                });
+
+                const data = await response.json();
+                return data.access_token;
+            } catch (error) {
+                console.error('Error fetching access token:', error);
+                return null;
+            }
+        }
+
+        async function fetchFlightData() {
+            const flightNumber = document.getElementById('flightNumber').value.trim();
+            const departureAirportID = document.getElementById('departureAirportID').value.trim();
+            const arrivalAirportID = document.getElementById('arrivalAirportID').value.trim();
+            
+            const errorMessage = document.getElementById("error-message");
+            if (!flightNumber && !departureAirportID && !arrivalAirportID) {
+                errorMessage.style.display = "block";
+                return;
+            }
+            errorMessage.style.display = "none";
+
+            const accessToken = await getAccessToken();
+            if (!accessToken) return;
+
+            let query = [];
+            if (flightNumber) query.push(`FlightNumber eq '${flightNumber}'`);
+            if (departureAirportID) query.push(`DepartureAirportID eq '${departureAirportID}'`);
+            if (arrivalAirportID) query.push(`ArrivalAirportID eq '${arrivalAirportID}'`);
+            const queryString = query.length ? `?$filter=${query.join(' and ')}&$format=JSON` : '?$format=JSON';
+            const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International${queryString}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        "authorization": "Bearer " + accessToken,
+                        "Accept-Encoding": "br,gzip",
+                    }
+                });
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error fetching flight data:', error);
+            }
+        }
+
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(flight => {
+                    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                        .filter(day => flight[day])
+                        .join(', ');
+
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'result';
+                    resultDiv.innerHTML = `
+                        <p><strong>航班編號 / Flight Number :</strong> ${flight.FlightNumber}</p>
+                        <p><strong>航空公司 / Airline ID :</strong> ${flight.AirlineID}</p>
+                        <p><strong>出發機場 / Departure Airport :</strong> ${flight.DepartureAirportID} at ${flight.DepartureTime}L</p>
+                        <p><strong>抵達機場 / Arrival Airport :</strong> ${flight.ArrivalAirportID} at ${flight.ArrivalTime}L</p>
+                        <p><strong>日　　期 / Schedule :</strong> ${flight.ScheduleStartDate} ~ ${flight.ScheduleEndDate}</p>
+                        <p><strong>飛行星期 / Available Days :</strong> ${days || 'None'}</p>
+                    `;
+                    resultsContainer.appendChild(resultDiv);
+                });
+            } else {
+                resultsContainer.innerHTML = '<div class="result">No flight information available.</div>';
+            }
+        }
+
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
             fetchFlightData();
         });
-
-        function checkInput() {
-            const flightNumber = document.getElementById("flightNumber").value.trim();
-            const departureAirportID = document.getElementById("departureAirportID").value.trim();
-            const arrivalAirportID = document.getElementById("arrivalAirportID").value.trim();
-            const searchButton = document.getElementById("searchButton");
-            const errorMessage = document.getElementById("error-message");
-
-            if (flightNumber || departureAirportID || arrivalAirportID) {
-                searchButton.disabled = false;
-                errorMessage.style.display = "none";
-            } else {
-                searchButton.disabled = true;
-                errorMessage.style.display = "block";
-            }
-        }
-
-        function fetchFlightData() {
-            const flightNumber = document.getElementById('flightNumber').value.trim();
-            const departureAirportID = document.getElementById('departureAirportID').value.trim();
-            const arrivalAirportID = document.getElementById('arrivalAirportID').value.trim();
-
-            if (!flightNumber && !departureAirportID && !arrivalAirportID) {
-                document.getElementById("error-message").style.display = "block";
-                return;
-            }
-
-            getAccessToken().then(accesstoken => {
-                if (accesstoken) {
-                    let query = [];
-                    if (flightNumber) query.push(`FlightNumber eq '${flightNumber}'`);
-                    if (departureAirportID) query.push(`DepartureAirportID eq '${departureAirportID}'`);
-                    if (arrivalAirportID) query.push(`ArrivalAirportID eq '${arrivalAirportID}'`);
-                    const queryString = query.length ? `?$filter=${query.join(' and ')}&$format=JSON` : '?$format=JSON';
-                    const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International${queryString}`;
-
-                    fetch(url, {
-                        headers: { "authorization": "Bearer " + accesstoken, "Accept-Encoding": "br,gzip" }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        const resultsContainer = document.getElementById('results');
-                        resultsContainer.innerHTML = '';
-
-                        if (data.length > 0) {
-                            data.forEach(flight => {
-                                const resultDiv = document.createElement('div');
-                                resultDiv.className = 'result';
-                                resultDiv.innerHTML = `
-                                    <p><strong>航班編號 / Flight Number :</strong> ${flight.FlightNumber}</p>
-                                    <p><strong>航空公司 / Airline ID :</strong> ${flight.AirlineID}</p>
-                                    <p><strong>出發機場 / Departure :</strong> ${flight.DepartureAirportID} at ${flight.DepartureTime}L</p>
-                                    <p><strong>抵達機場 / Arrival :</strong> ${flight.ArrivalAirportID} at ${flight.ArrivalTime}L</p>
-                                `;
-                                resultsContainer.appendChild(resultDiv);
-                            });
-                        } else {
-                            resultsContainer.innerHTML = '<div class="result">No flight information available.</div>';
-                        }
-                    })
-                    .catch(error => console.error('Error fetching flight data:', error));
-                }
-            });
-        }
     </script>
 </body>
 </html>
