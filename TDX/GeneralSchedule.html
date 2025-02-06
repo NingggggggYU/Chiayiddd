@@ -13,41 +13,22 @@
             padding: 0;
             display: flex;
             height: 100vh;
-            flex-direction: column;
         }
         .container {
             display: flex;
-            flex-direction: column;
+            width: 100%;
             height: 100vh;
         }
         .search-container {
-            width: 100%;
+            width: 30%;
             max-width: 400px;
             background-color: #fff;
             padding: 20px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            border-bottom: 2px solid #ddd;
-            transition: max-height 0.3s ease-in-out;
-            overflow: hidden;
-        }
-        .collapsed {
-            max-height: 50px;
-            padding: 10px;
-        }
-        .collapsed form {
-            display: none;
-        }
-        .toggle-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: #007bff;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: left;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            border-right: 2px solid #ddd;
         }
         .results-container {
-            flex-grow: 1;
+            width: 70%;
             padding: 20px;
             overflow-y: auto;
         }
@@ -61,6 +42,7 @@
             padding: 5px 10px;
             border-radius: 4px;
         }
+        
         label {
             font-weight: bold;
             color: #333;
@@ -94,33 +76,35 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
         }
+
         .result p strong {
             color: #007bff;
         }
+        
         @media (max-width: 768px) {
-            .search-container {
-                max-width: 100%;
+            .container {
+                flex-direction: column;
             }
-            .toggle-btn {
-                display: block;
+            .search-container, .results-container {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="searchContainer" class="search-container">
+        <div class="search-container">
             <h1 id="page-title">國際航空定期時刻表</h1>
-            <button id="toggleButton" class="toggle-btn">🔍 展開搜尋</button>
+            <p id="page-title-en">General Schedule International</p>
             <form id="searchForm">
-                <label>航班編號 / Flight Number:</label>
-                <input type="text" id="flightNumber" pattern="[A-Za-z0-9]*" oninput="this.value = this.value.toUpperCase();">
+                <label class="form-label">航班編號 / Flight Number:</label>
+                <input type="text" id="flightNumber" name="flightNumber" pattern="[A-Za-z0-9]*" oninput="this.value = this.value.toUpperCase();">
 
-                <label>出發機場 / Departure Airport :</label>
-                <input type="text" id="departureAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
+                <label class="form-label">出發機場 / Departure Airport :</label>
+                <input type="text" id="departureAirportID" name="departureAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
-                <label>抵達機場 / Arrival Airport :</label>
-                <input type="text" id="arrivalAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
+                <label class="form-label">抵達機場 / Arrival Airport :</label>
+                <input type="text" id="arrivalAirportID" name="arrivalAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
                 <p id="error-message" class="error-message">請至少輸入一項查詢條件！</p>
                 
@@ -129,60 +113,99 @@
         </div>
         <div id="results" class="results-container"></div>
     </div>
+
     <script>
-        function fetchFlightData() {
+        async function getAccessToken() {
+            const parameter = {
+                grant_type: "client_credentials",
+                client_id: "yuche0826-7e3f053e-05b0-4345",
+                client_secret: "4541eb2b-6bbd-4a5b-a025-2335227d4c96"
+            };
+
+            try {
+                const response = await fetch("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token", {
+                    method: 'POST',
+                    headers: {
+                        "Accept-Encoding": "br,gzip",
+                    },
+                    body: new URLSearchParams(parameter)
+                });
+
+                const data = await response.json();
+                return data.access_token;
+            } catch (error) {
+                console.error('Error fetching access token:', error);
+                return null;
+            }
+        }
+
+        async function fetchFlightData() {
             const flightNumber = document.getElementById('flightNumber').value.trim();
             const departureAirportID = document.getElementById('departureAirportID').value.trim();
             const arrivalAirportID = document.getElementById('arrivalAirportID').value.trim();
-            const resultsContainer = document.getElementById('results');
-
+            
+            const errorMessage = document.getElementById("error-message");
             if (!flightNumber && !departureAirportID && !arrivalAirportID) {
-                document.getElementById('error-message').style.display = "block";
+                errorMessage.style.display = "block";
                 return;
-            } else {
-                document.getElementById('error-message').style.display = "none";
             }
+            errorMessage.style.display = "none";
 
-            resultsContainer.innerHTML = "<p>Loading...</p>";
+            const accessToken = await getAccessToken();
+            if (!accessToken) return;
 
-            setTimeout(() => {
-                resultsContainer.innerHTML = `
-                    <div class="result">
-                        <p><strong>航班編號 / Flight Number :</strong> ${flightNumber || "N/A"}</p>
-                        <p><strong>出發機場 / Departure Airport :</strong> ${departureAirportID || "N/A"}</p>
-                        <p><strong>抵達機場 / Arrival Airport :</strong> ${arrivalAirportID || "N/A"}</p>
-                        <p><strong>飛行星期 / Available Days :</strong> Monday, Wednesday, Friday</p>
-                    </div>
-                `;
-                collapseSearch();
-            }, 1000);
+            let query = [];
+            if (flightNumber) query.push(`FlightNumber eq '${flightNumber}'`);
+            if (departureAirportID) query.push(`DepartureAirportID eq '${departureAirportID}'`);
+            if (arrivalAirportID) query.push(`ArrivalAirportID eq '${arrivalAirportID}'`);
+            const queryString = query.length ? `?$filter=${query.join(' and ')}&$format=JSON` : '?$format=JSON';
+            const url = `https://tdx.transportdata.tw/api/basic/v2/Air/GeneralSchedule/International${queryString}`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        "authorization": "Bearer " + accessToken,
+                        "Accept-Encoding": "br,gzip",
+                    }
+                });
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error fetching flight data:', error);
+            }
         }
 
-        function collapseSearch() {
-            const searchContainer = document.getElementById('searchContainer');
-            const toggleButton = document.getElementById('toggleButton');
-            searchContainer.classList.add('collapsed');
-            toggleButton.innerText = "🔍 展開搜尋";
-        }
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
 
-        function expandSearch() {
-            const searchContainer = document.getElementById('searchContainer');
-            const toggleButton = document.getElementById('toggleButton');
-            searchContainer.classList.remove('collapsed');
-            toggleButton.innerText = "🔻 收起搜尋";
+            if (data.length > 0) {
+                data.forEach(flight => {
+                    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                        .filter(day => flight[day])
+                        .join(', ');
+
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'result';
+                    resultDiv.innerHTML = `
+                        <p><strong>航班編號 / Flight Number :</strong> ${flight.FlightNumber}</p>
+                        <p><strong>航空公司 / Airline ID :</strong> ${flight.AirlineID}</p>
+                        <p><strong>出發機場 / Departure Airport :</strong> ${flight.DepartureAirportID} at ${flight.DepartureTime}L</p>
+                        <p><strong>抵達機場 / Arrival Airport :</strong> ${flight.ArrivalAirportID} at ${flight.ArrivalTime}L</p>
+                        <p><strong>日　　期 / Schedule :</strong> ${flight.ScheduleStartDate} ~ ${flight.ScheduleEndDate}</p>
+                        <p><strong>飛行星期 / Available Days :</strong> ${days || 'None'}</p>
+                    `;
+                    resultsContainer.appendChild(resultDiv);
+                });
+            } else {
+                resultsContainer.innerHTML = '<div class="result">No flight information available.</div>';
+            }
         }
 
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
             fetchFlightData();
-        });
-
-        document.getElementById('toggleButton').addEventListener('click', function() {
-            if (document.getElementById('searchContainer').classList.contains('collapsed')) {
-                expandSearch();
-            } else {
-                collapseSearch();
-            }
         });
     </script>
 </body>
