@@ -86,7 +86,13 @@
                 flex-direction: column;
                 
             }
-            .search-container, .results-container {
+            .search-container {
+                position: relative;
+                height: auto;
+                max-height: none;
+                overflow-y: auto;
+            }
+            .results-container {
                 width: 100%;
                 
             }
