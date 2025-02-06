@@ -27,12 +27,6 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             border-right: 2px solid #ddd;
         }
-        h1 {
-            color: #333;
-            margin-top: 0;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
         .results-container {
             width: 70%;
             padding: 20px;
@@ -89,18 +83,18 @@
 <body>
     <div class="container">
         <div class="search-container">
-            <h1>General Schedule International</h1>
+            <h1 id="page-title">General Schedule International</h1>
             <form id="searchForm">
-                <label for="flightNumber">Flight Number:</label>
+                <label class="form-label">Flight Number:</label>
                 <input type="text" id="flightNumber" name="flightNumber" pattern="[A-Za-z0-9]*" oninput="this.value = this.value.toUpperCase();">
 
-                <label for="departureAirportID">Departure Airport ID:</label>
+                <label class="form-label">Departure Airport ID:</label>
                 <input type="text" id="departureAirportID" name="departureAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
-                <label for="arrivalAirportID">Arrival Airport ID:</label>
+                <label class="form-label">Arrival Airport ID:</label>
                 <input type="text" id="arrivalAirportID" name="arrivalAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
-                <button type="submit">Search</button>
+                <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>
         <div id="results" class="results-container"></div>
