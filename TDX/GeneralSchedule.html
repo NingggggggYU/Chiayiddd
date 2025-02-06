@@ -32,6 +32,17 @@
             padding: 20px;
             overflow-y: auto;
         }
+        .error-message {
+            color: red; /* 錯誤訊息顏色 */
+            font-size: 14px; /* 文字大小 */
+            margin-top: 5px; /* 與輸入框間距 */
+            display: none; /* 預設隱藏 */
+            background-color: #ffecec; /* 淡紅色背景 */
+            border: 1px solid #ff5c5c; /* 紅色邊框 */
+            padding: 5px 10px; /* 內距 */
+            border-radius: 4px; /* 圓角邊框 */
+        }
+        
         label {
             font-weight: bold;
             color: #333;
@@ -89,12 +100,14 @@
                 <label class="form-label">航班編號 / Flight Number:</label>
                 <input type="text" id="flightNumber" name="flightNumber" pattern="[A-Za-z0-9]*" oninput="this.value = this.value.toUpperCase();">
 
-                <label class="form-label">出發機場 / Departure Airport ID:</label>
+                <label class="form-label">出發機場 / Departure Airport :</label>
                 <input type="text" id="departureAirportID" name="departureAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
-                <label class="form-label">抵達機場 / Arrival Airport ID:</label>
+                <label class="form-label">抵達機場 / Arrival Airport :</label>
                 <input type="text" id="arrivalAirportID" name="arrivalAirportID" pattern="[A-Za-z]*" oninput="this.value = this.value.toUpperCase();">
 
+                <p id="error-message" style="color: red; display: none;">請至少輸入一項查詢條件！</p>
+                
                 <button class="btn btn-primary" type="submit">查詢 / Query</button>
             </form>
         </div>
@@ -157,12 +170,12 @@
                                 const resultDiv = document.createElement('div');
                                 resultDiv.className = 'result';
                                 resultDiv.innerHTML = `
-                                    <p><strong>航班編號 / Flight Number:</strong> ${flight.FlightNumber}</p>
-                                    <p><strong>航空公司 / Airline ID:</strong> ${flight.AirlineID}</p>
-                                    <p><strong>出發機場 / Departure Airport:</strong> ${flight.DepartureAirportID} at ${flight.DepartureTime}L</p>
-                                    <p><strong>抵達機場 / Arrival Airport:</strong> ${flight.ArrivalAirportID} at ${flight.ArrivalTime}L</p>
-                                    <p><strong>日　　期 / Schedule:</strong> ${flight.ScheduleStartDate} to ${flight.ScheduleEndDate}</p>
-                                    <p><strong>飛行星期 / Available Days:</strong> ${days || 'None'}</p>
+                                    <p><strong>航班編號 / Flight Number :</strong> ${flight.FlightNumber}</p>
+                                    <p><strong>航空公司 / Airline ID :</strong> ${flight.AirlineID}</p>
+                                    <p><strong>出發機場 / Departure Airport :</strong> ${flight.DepartureAirportID} at ${flight.DepartureTime}L</p>
+                                    <p><strong>抵達機場 / Arrival Airport :</strong> ${flight.ArrivalAirportID} at ${flight.ArrivalTime}L</p>
+                                    <p><strong>日　　期 / Schedule :</strong> ${flight.ScheduleStartDate} ~ ${flight.ScheduleEndDate}</p>
+                                    <p><strong>飛行星期 / Available Days :</strong> ${days || 'None'}</p>
                                 `;
                                 resultsContainer.appendChild(resultDiv);
                             });
@@ -179,6 +192,33 @@
             event.preventDefault();
             fetchFlightData();
         });
+
+        function checkInput() {
+        const flightNumber = document.getElementById("flightNumber").value.trim();
+        const departureAirportID = document.getElementById("departureAirportID").value.trim();
+        const arrivalAirportID = document.getElementById("arrivalAirportID").value.trim();
+        const searchButton = document.getElementById("searchButton");
+        const errorMessage = document.getElementById("error-message");
+
+        if (flightNumber || departureAirportID || arrivalAirportID) {
+            searchButton.disabled = false;
+            errorMessage.style.display = "none";
+        } else {
+            searchButton.disabled = true;
+            errorMessage.style.display = "block";
+        }
+    }
+
+        document.getElementById("searchForm").addEventListener("submit", function(event) {
+        const flightNumber = document.getElementById("flightNumber").value.trim();
+        const departureAirportID = document.getElementById("departureAirportID").value.trim();
+        const arrivalAirportID = document.getElementById("arrivalAirportID").value.trim();
+
+        if (!flightNumber && !departureAirportID && !arrivalAirportID) {
+            event.preventDefault(); // 阻止表單提交
+            document.getElementById("error-message").style.display = "block";
+        }
+    });
     </script>
 </body>
 </html>
