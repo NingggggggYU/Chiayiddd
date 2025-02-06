@@ -12,22 +12,23 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            overflow-y: auto;
+            height: 100vh;
         }
         .container {
             display: flex;
-            flex-direction: column;
             width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
         }
         .search-container {
+            width: 30%;
             background-color: #fff;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+        }
+        .results-container {
+            width: 70%;
+            padding: 20px;
+            overflow-y: auto;
         }
         label {
             font-weight: bold;
@@ -54,9 +55,6 @@
         }
         button:hover {
             background-color: #0056b3;
-        }
-        .results-container {
-            margin-top: 20px;
         }
         .result {
             background-color: #fff;
@@ -136,6 +134,10 @@
 
                         if (data.length > 0) {
                             data.forEach(flight => {
+                                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                                    .filter(day => flight[day])
+                                    .join(', ');
+                                
                                 const resultDiv = document.createElement('div');
                                 resultDiv.className = 'result';
                                 resultDiv.innerHTML = `
@@ -144,6 +146,7 @@
                                     <p><strong>Departure Airport:</strong> ${flight.DepartureAirportID} at ${flight.DepartureTime}</p>
                                     <p><strong>Arrival Airport:</strong> ${flight.ArrivalAirportID} at ${flight.ArrivalTime}</p>
                                     <p><strong>Schedule:</strong> ${flight.ScheduleStartDate} to ${flight.ScheduleEndDate}</p>
+                                    <p><strong>Available Days:</strong> ${days || 'None'}</p>
                                 `;
                                 resultsContainer.appendChild(resultDiv);
                             });
