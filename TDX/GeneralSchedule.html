@@ -86,13 +86,21 @@
             .container {
                 flex-direction: column;
                 height: 100vh;
-                overflow-y:auto;
+                overflow-y: auto; /* 讓整個畫面可以滾動 */
             }
             .search-container {
                 width: 100%;
+                max-height: 200px; /* 固定搜尋欄高度 */
+                overflow-y: hidden; /* 避免搜尋欄內部滾動 */
+                position: sticky; /* 讓它固定在頁面頂部 */
+                top: 0;
+                background-color: white; /* 確保不會透明 */
+                z-index: 10; /* 避免被內容遮住 */
             }
             .results-container {
                 width: 100%;
+                flex-grow: 1; /* 讓結果區塊撐滿剩餘空間 */
+                overflow-y: auto; /* 允許滾動 */
             }
         }
     </style>
