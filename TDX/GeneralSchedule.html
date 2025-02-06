@@ -117,30 +117,36 @@
     </div>
 
     <script>
-        function getAccessToken() {
-            const parameter = {
-                grant_type: "client_credentials",
-                client_id: "yuche0826-7e3f053e-05b0-4345",
-                client_secret: "4541eb2b-6bbd-4a5b-a025-2335227d4c96"
-            };
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetchFlightData();
+        });
 
-            return fetch("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token", {
-                method: 'POST',
-                headers: { "Accept-Encoding": "br,gzip" },
-                body: new URLSearchParams(parameter)
-            })
-            .then(response => response.json())
-            .then(data => data.access_token)
-            .catch(error => {
-                console.error('Error fetching access token:', error);
-                return null;
-            });
+        function checkInput() {
+            const flightNumber = document.getElementById("flightNumber").value.trim();
+            const departureAirportID = document.getElementById("departureAirportID").value.trim();
+            const arrivalAirportID = document.getElementById("arrivalAirportID").value.trim();
+            const searchButton = document.getElementById("searchButton");
+            const errorMessage = document.getElementById("error-message");
+
+            if (flightNumber || departureAirportID || arrivalAirportID) {
+                searchButton.disabled = false;
+                errorMessage.style.display = "none";
+            } else {
+                searchButton.disabled = true;
+                errorMessage.style.display = "block";
+            }
         }
 
         function fetchFlightData() {
             const flightNumber = document.getElementById('flightNumber').value.trim();
             const departureAirportID = document.getElementById('departureAirportID').value.trim();
             const arrivalAirportID = document.getElementById('arrivalAirportID').value.trim();
+
+            if (!flightNumber && !departureAirportID && !arrivalAirportID) {
+                document.getElementById("error-message").style.display = "block";
+                return;
+            }
 
             getAccessToken().then(accesstoken => {
                 if (accesstoken) {
@@ -178,11 +184,6 @@
                     .catch(error => console.error('Error fetching flight data:', error));
                 }
             });
-        }
-
-        function checkInput() {
-            const inputs = [document.getElementById("flightNumber").value.trim(), document.getElementById("departureAirportID").value.trim(), document.getElementById("arrivalAirportID").value.trim()];
-            document.getElementById("searchButton").disabled = !inputs.some(val => val);
         }
     </script>
 </body>
