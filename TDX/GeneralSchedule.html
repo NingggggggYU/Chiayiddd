@@ -82,21 +82,46 @@
         }
         
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                
-            }
-            .search-container {
-                position: relative;
-                height: auto;
-                max-height: none;
-                overflow-y: auto;
-            }
-            .results-container {
-                width: 100%;
-                
-            }
+        .container {
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; /* 讓整個頁面可以滑動 */
         }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px; /* 限制最大寬度，避免過寬 */
+            margin: 0 auto; /* 置中 */
+            padding: 20px;
+            text-align: center; /* 讓內部的文字與按鈕置中 */
+            position: relative; /* 確保可以自由滑動 */
+            height: auto; 
+            max-height: none; 
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .results-container {
+            width: 100%;
+            max-width: 600px; /* 限制最大寬度，避免過寬 */
+            margin: 0 auto; /* 置中 */
+            padding: 20px;
+            overflow-y: auto; /* 讓結果可以滑動 */
+        }
+
+        .result {
+            text-align: left; /* 讓文字靠左對齊 */
+            padding: 15px;
+            margin: 0 auto; /* 讓結果區塊置中 */
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+    }
+
     </style>
 </head>
 <body>
