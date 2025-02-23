@@ -27,12 +27,17 @@
             let inputField = document.getElementById("nowPage");
             let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
              inputField.value = currentValue + 1;
-}
+        }
+        function decreasePage() {
+            let inputField = document.getElementById("nowPage");
+            let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
+             inputField.value = currentValue - 1;
+        }
     </script>
 </head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 25.01</div>
+      <div class="version-text">Version : 25.02</div>
       <form class="login-container" id="loginForm" name="reloadForm" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/choose.action">
         <div id="main-header">
           <div>
@@ -52,13 +57,13 @@
             <label class="form-label" for="betd">過去時間(-) / Query By ETD(-)</label>
             <input class="input-field" placeholder="" id="betd" type="text" name="betd" value="8">
             <div>
-                <button style="text-align: center; width:50px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('betd', 168)">7天</button>
-                <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('betd', 336)">14天</button>
-                <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('betd', 672)">28天</button>
-                <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('betd', 1080)">45天</button>
             </div>
           </div>
@@ -66,19 +71,21 @@
             <label class="form-label" for="aetd">未來時間(+) / Query By ETD(+)</label>
             <input class="input-field" placeholder="" id="aetd" type="text" name="aetd" value="4">
             <div>
-                <button style="text-align: center; width:50px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('aetd', 168)">7天</button>
-                <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('aetd', 336)">14天</button>
-                <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('aetd', 672)">28天</button>
-                <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                <button style="text-align: center; font-size:14px; width:60px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('aetd', 1080)">45天</button>
             </div>
           </div>
           <div class="a-form-control">
             <label class="form-label" for="nowPage">顯示頁數 / Page</label>
             <input class="input-field" placeholder="" id="nowPage" type="text" name="nowPage" value="1">
+            <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                    onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="decreasePage()">-1</button>
             <button style="text-align: center; width:65px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="increasePage()">+1</button>
           </div>
