@@ -84,6 +84,12 @@
           <div class="a-form-control">
             <label class="form-label" for="nowPage">顯示頁數 / Page</label>
             <input class="input-field" placeholder="" id="nowPage" type="text" name="nowPage" value="1">
+            <a href="javascript:decreasePage()">
+                <img src="./previous.gif" border="0">
+            </a>
+            <a href="javascript:increasePage()">
+                <img src="./next.gif" border="0">
+            </a>
             <button style="text-align: center; width:50px; height:30px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="decreasePage()">-1</button>
             <button style="text-align: center; width:50px; height:30px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
@@ -94,7 +100,7 @@
           <input type="hidden" name="token" value="Unknown">
 
           <div class="error-box" id="error-box">
-            <img style="float:left" src="error.png">
+            <img style="float:left" src="error.png" >
             <div id="errId"></div>
           </div>
 
