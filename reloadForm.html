@@ -41,11 +41,16 @@
             let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
              inputField.value = currentValue - 12;
         }
+        function increasebetd() {
+            let inputField = document.getElementById("betd");
+            let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
+             inputField.value = currentValue + 12;
+        }
     </script>
 </head>
 <body>
     <div id="main">
-      <div class="version-text">Version : 25.05</div>
+      <div class="version-text">Version : 25.06</div>
       <form class="login-container" id="loginForm" name="reloadForm" method="POST" action="https://hdqweb02.china-airlines.com/webjc/brief/choose.action">
         <div id="main-header">
           <div>
@@ -68,7 +73,7 @@
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="decreasebetd()">-12h</button>
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
-                    onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="decreasebetd()>+12h</button></br>
+                    onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="increasebetd()>+12h</button>
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('betd', 168)">7天</button>
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
