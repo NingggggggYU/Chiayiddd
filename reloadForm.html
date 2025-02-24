@@ -36,15 +36,25 @@
             let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
              inputField.value = currentValue - 1;
         }
-        function decreasebetd() {
+        function decreasebetd12() {
             let inputField = document.getElementById("betd");
             let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
              inputField.value = currentValue - 12;
         }
-        function increasebetd() {
+        function decreasebetd24() {
+            let inputField = document.getElementById("betd");
+            let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
+             inputField.value = currentValue - 24;
+        }
+        function increasebetd12() {
             let inputField = document.getElementById("betd");
             let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
              inputField.value = currentValue + 12;
+        }
+        function increasebetd24() {
+            let inputField = document.getElementById("betd");
+            let currentValue = parseInt(inputField.value) || 0; // 轉換為數字，避免 NaN
+             inputField.value = currentValue + 24;
         }
     </script>
 </head>
@@ -71,9 +81,13 @@
             <input class="input-field" placeholder="" id="betd" type="text" name="betd" value="8">
             <div>
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(97, 99, 98)" 
-                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="decreasebetd()">-12h</button>
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="decreasebetd24()">-24h</button>
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(97, 99, 98)" 
-                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="increasebetd()">+12h</button>
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="decreasebetd12()">-12h</button>
+                <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(97, 99, 98)" 
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="increasebetd12()">+12h</button>
+                <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(97, 99, 98)" 
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="increasebetd24()">+24h</button>
                 <br>
                 <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
                     onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('betd', 168)">7天</button>
