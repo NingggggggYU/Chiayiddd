@@ -95,6 +95,20 @@
           <div class="a-form-control">
             <label class="form-label" for="queryStation">場站 / Stations</label>
             <input class="input-field" placeholder="IATA" id="queryStation" type="text" name="queryStation" value="ALL" oninput="this.value = this.value.toUpperCase();">
+            <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                    onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('queryStation', 'TPE')">TPE</button>
+            <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                    onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('queryStation', 'TSA')">TSA</button>
+            <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(246, 241, 233); color: rgb(244, 149, 78)" 
+                    onmouseover="this.style.backgroundColor='rgb(240, 235, 225)';" onmouseout="this.style.backgroundColor='rgb(246, 241, 233)'; "type="button" onclick="setETDValue('queryStation', 'KHH')">KHH</button><br>
+            <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(42, 153, 76)" 
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="setETDValue('queryStation', 'CTS')">CTS</button>
+            <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(42, 153, 76)" 
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="setETDValue('queryStation', 'OKA')">OKA</button>
+            <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(42, 153, 76)" 
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="setETDValue('queryStation', 'OKA')">NRT</button>
+              <button style="text-align: center; font-size:14px; width:60px; height:35px; margin-top: 5px; border-radius: 5px; border: 1px solid rgb(220, 220, 220); background-color: rgb(222, 247, 235); color: rgb(42, 153, 76)" 
+                    onmouseover="this.style.backgroundColor='rgb(190, 230, 220)';" onmouseout="this.style.backgroundColor='rgb(222, 247, 235)'; "type="button" onclick="setETDValue('queryStation', 'OKA')">KIX</button>
           </div>
          <div class="a-form-control">
             <label class="form-label" for="betd">過去時間(-) / Query By ETD(-)</label>
