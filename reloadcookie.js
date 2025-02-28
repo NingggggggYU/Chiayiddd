@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector("form");
     const inputs = form.querySelectorAll("input");
 
-    // 取得 7 天後的日期
+    // 取得 3 天後的日期
     const expiresDate = new Date();
     expiresDate.setDate(expiresDate.getDate() + 3); // 72小時後失效
 
